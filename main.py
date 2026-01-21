@@ -64,6 +64,22 @@ def bressenham(surface, x0, y0, x1, y1, color):
 
         x += 1
 
+def naive_line(surface, x0, y0, x1, y1, color):
+    if x0 > x1:
+        x0, x1 = x1, x0
+        y0, y1 = y1, y0
+
+    dx = x1 - x0
+
+    if dx == 0:
+        return
+    
+    m = (y1 - y0) / dx
+    b = y0 - m*x0
+
+    for x in range(x0, x1 + 1):
+        y = m*x + b
+        set_pixel(surface, x, y, color)
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("TESTES")
