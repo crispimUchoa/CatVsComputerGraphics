@@ -1,14 +1,18 @@
 from pygame.surface import Surface
 
 color_type = str | tuple[int, int, int]
+coord_type = tuple[int, int]
 
-def set_pixel(surface: Surface, x: int, y: int, color: color_type):
+def set_pixel(surface: Surface, xy: coord_type, color: color_type):
+    x, y = xy
     surface.set_at((x,y), color)
 
-def read_pixel(surface: Surface, x: int, y: int):
-    return surface.get_at((x, y))
+def read_pixel(surface: Surface, xy: coord_type):
+    return surface.get_at(xy)
 
-def draw_dda_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:color_type):
+def draw_dda_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
+    x0, y0 = xy0
+    x1, y1 = xy1
     dx = x1 - x0
     dy = y1 - y0
 
@@ -22,11 +26,13 @@ def draw_dda_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:color_
         y = y0
 
         for _ in range(steps + 1):
-            set_pixel(surface, round(x), round(y), color)
+            set_pixel(surface, (round(x), round(y)), color)
             x += x_inc
             y += y_inc
 
-def draw_bressenham_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:color_type):
+def draw_bressenham_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
+    x0, y0 = xy0
+    x1, y1 = xy1
     steep = abs(y1 - y0) > abs(x1 - x0)
     if steep:
         x0, y0 = y0, x0
@@ -53,9 +59,9 @@ def draw_bressenham_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color
 
     while x <= x1:
         if steep:
-            set_pixel(surface, y, x, color)
+            set_pixel(surface, (y, x), color)
         else:
-            set_pixel(surface, x, y, color)
+            set_pixel(surface, (x, y), color)
 
         if d <= 0:
             d += incE
@@ -65,7 +71,9 @@ def draw_bressenham_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color
 
         x += 1
 
-def draw_naive_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:color_type):
+def draw_naive_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
+    x0, y0 = xy0
+    x1, y1 = xy1
     if x0 > x1:
         x0, x1 = x1, x0
         y0, y1 = y1, y0
@@ -80,17 +88,47 @@ def draw_naive_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:colo
 
     for x in range(x0, x1 + 1):
         y = m*x + b
-        set_pixel(surface, x, y, color)
+        set_pixel(surface, (x, y), color)
 
-def draw_polygon(surface: Surface, vertices: list[tuple[int, int]], color: color_type):
+def draw_polygon(surface: Surface, vertices: list[coord_type], color: color_type):
     num_v = len(vertices)
 
     if num_v < 3:
         return
 
     for i in range(num_v):
-        x0, y0 = vertices[i]
-        x1, y1 = vertices[(i+1) % num_v]
-        print(x1, y1)
+        xy0 = vertices[i]
+        xy1 = vertices[(i+1) % num_v]
 
-        draw_bressenham_line(surface, x0, y0, x1, y1, color)
+        draw_bressenham_line(surface, xy0, xy1, color)
+
+def plot8(surface: Surface, xyc: coord_type, xy: coord_type, color):
+    xc, yc = xyc
+    x, y = xy
+    set_pixel(surface, (xc + x, yc + y), color)
+    set_pixel(surface, (xc - x, yc + y), color)
+    set_pixel(surface, (xc + x, yc - y), color)
+    set_pixel(surface, (xc - x, yc - y), color)
+
+    set_pixel(surface, (xc + y, yc + x), color)
+    set_pixel(surface, (xc - y, yc + x), color)
+    set_pixel(surface, (xc + y, yc - x), color)
+    set_pixel(surface, (xc - y, yc - x), color)
+
+
+def draw_circle(surface: Surface, center: coord_type, r: int, color: color_type):
+    x = 0
+    y = r
+    d = 1 - r
+    
+    plot8(surface, center, (x, y), color)
+
+    while x < y:
+        if d < 0:
+            d+=2*x + 3
+        else:
+            d+=2*(x - y) + 5
+            y -=1
+        x+=1
+        plot8(surface, center, (x, y), color)
+
