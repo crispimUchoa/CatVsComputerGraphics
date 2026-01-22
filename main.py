@@ -15,7 +15,7 @@ while running:
             running = False
 
     screen.fill((0, 255, 255))
-
+    primitives.draw_polygon(screen, [(50, 50), (50, 100), (100, 80), (100, 70)], (0, 0, 0))
 
     pygame.display.flip()
 

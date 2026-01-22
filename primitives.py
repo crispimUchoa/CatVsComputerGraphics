@@ -27,7 +27,7 @@ def draw_dda_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:color_
             y += y_inc
 
 def draw_bressenham_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:color_type):
-    steep = abs(y1 - y0) > (x1 - x0)
+    steep = abs(y1 - y0) > abs(x1 - x0)
     if steep:
         x0, y0 = y0, x0
         x1, y1 = y1, x1
@@ -83,4 +83,14 @@ def draw_naive_line(surface: Surface, x0:int, y0:int, x1:int, y1:int, color:colo
         set_pixel(surface, x, y, color)
 
 def draw_polygon(surface: Surface, vertices: list[tuple[int, int]], color: color_type):
-    ...
+    num_v = len(vertices)
+
+    if num_v < 3:
+        return
+
+    for i in range(num_v):
+        x0, y0 = vertices[i]
+        x1, y1 = vertices[(i+1) % num_v]
+        print(x1, y1)
+
+        draw_bressenham_line(surface, x0, y0, x1, y1, color)
