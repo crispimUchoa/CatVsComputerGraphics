@@ -6,7 +6,8 @@ coord_type = tuple[int, int]
 
 def set_pixel(surface: Surface, xy: coord_type, color: color_type):
     x, y = xy
-    surface.set_at((x,y), color)
+    if 0 <= 0 < surface.get_width() and 0 <= y < surface.get_height():
+        surface.set_at((x,y), color)
 
 def read_pixel(surface: Surface, xy: coord_type):
     return surface.get_at(xy)
