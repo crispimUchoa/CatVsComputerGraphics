@@ -276,3 +276,22 @@ def transform(m, vertices):
         new.append((x_new, y_new))
 
     return new
+
+#Janela -> Viewport
+def window_viewport(window, viewport):
+    Wxmin, Wymin, Wxmax, Wymax = window
+    Vxmin, Vymin, Vxmax, Vymax = viewport
+
+    sx = (Vxmax - Vxmin) / (Wxmax - Wxmin)
+    sy = (Vymax - Vymin) / (Wymax - Wymin)
+
+    m = identity()
+
+    m = multiply_matrix(translation(-Wxmin, -Wymin), m)
+ 
+    m = multiply_matrix(scale(sx, sy), m)
+
+    m = multiply_matrix(translation(Vxmin, Vymin), m)
+
+    return m
+
