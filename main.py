@@ -15,8 +15,8 @@ while running:
             running = False
 
     screen.fill((0, 255, 255))
-    primitives.draw_circle(screen, (300, 300), 50, 'black')
-    primitives.flood_fill(screen, (0, 0), (255, 0, 0), (0, 0, 0))
+    primitives.scanline_fill(screen, [(50, 50), (50, 100), (100, 80), (100, 70)], (255, 255, 0))
+    primitives.draw_polygon(screen, [(50, 50), (50, 100), (100, 80), (100, 70)], (0, 0, 0))
     pygame.display.flip()
 
     clock.tick(60)
