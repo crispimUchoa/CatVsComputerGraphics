@@ -260,7 +260,7 @@ def scanline_elipses(surface: Surface, center: coord_type, a: int, b:int, fill_c
         if v < 0:
             continue
         x = int(a * math.sqrt(v))
-        
+
         for xi in range(-x, x + 1):
             set_pixel(surface, (xc + xi, yc + y), fill_color)
 
@@ -336,3 +336,119 @@ def window_viewport(window, viewport):
 
     return m
 
+#####################################
+
+# CLIPPING
+
+#####################################
+INSIDE  = 0
+LEFT    = 1
+RIGHT   = 2
+BOTTOM  = 4
+TOP     = 8
+
+
+def region_code(x, y, xmin, ymin, xmax, ymax):
+    code = INSIDE
+
+    if x < xmin: code |= LEFT
+    elif x > xmax: code |= RIGHT
+    elif y < ymin: code |= TOP
+    elif y > ymax: code |= BOTTOM
+
+    return code
+
+def cohen_sutherland(x0, y0, x1, y1, xmin, ymin, xmax, ymax):
+    c0 = region_code(x0, y0, xmin, ymin, xmax, ymax)
+    c1 = region_code(x1, y1, xmin, ymin, xmax, ymax)
+
+    while True:
+        if not (c0 | c1):
+            return True, x0, y0, x1, y1
+    
+        if c0 & c1:
+            return False, None, None, None, None
+        
+        c_out = c0 if c0 else c1
+
+        if c_out & TOP:
+            x = x0 + (x1 - x0) * (ymin - y0) / (y1 - y0)
+            y = ymin
+        elif c_out & BOTTOM:
+            x = x0 + (x1 - x0) * (ymax - y0) / (y1 - y0)
+            y = ymax
+        elif c_out & RIGHT:
+            y = y0 + (y1 - y0) * (xmax - x0) / (x1 - x0)
+            x = xmax
+        elif c_out & LEFT:
+            y = y0 + (y1 - y0) * (xmin - x0) / (x1 - x0)
+            x = xmin
+
+        if c_out == c0:
+            x0, y0 = x, y
+            c0 = region_code(x0, y0, xmin, ymin, xmax, ymax)
+        else:
+            x1, y1 = x, y
+            c1 = region_code(x1, y1, xmin, ymin, xmax, ymax)
+
+
+def scanline_texture(surface: Surface, vertices, uvs, texture):
+    n = len(vertices)
+    tex_w, tex_h = texture.get_width(), texture.get_height()
+    ys = [p[1] for p in vertices]
+
+    y_min = int(min(ys))
+    y_max = int(max(ys))
+
+    for y in range(y_min, y_max):
+        inter = []
+
+        for i in range(n):
+            x0, y0 = vertices[i]
+            x1, y1 = vertices[(i+1) % n]
+
+            u0, v0 = uvs[i]
+            u1, v1 = uvs[(i+1) % n]
+
+            if y0 == y1:
+                continue
+
+            if y0 > y1:
+                x0, y0, x1, y1 = x1, y1, x0, y0
+                u0, v0, u1, v1 = u1, v1, u0, v0
+
+            if y < y0 or y >= y1:
+                continue
+
+            t = (y - y0) / (y1 - y0)
+
+            x = x0 + t * (x1 - x0)
+            u = u0 + t * (u1 - u0)
+            v = v0 + t * (v1 - v0)
+
+            inter.append((x, u, v))
+
+        inter.sort(key=lambda i:i[0])
+
+        for i in range(0, len(inter), 2):
+            if i + 1 >= len(inter):
+                continue
+
+            x_start, u_start, v_start = inter[i]
+            x_end, u_end, v_end = inter[i + 1]
+
+            if x_start == x_end:
+                continue
+
+            for x in range(int(x_start), int(x_end) + 1):
+                t = (x - x_start) / (x_end - x_start)
+
+                u = u_start + t * (u_end - u_start)
+                v = v_start + t * (v_end - v_start)
+
+                tx = int(u * (tex_w - 1))
+                ty = int(v * (tex_h - 1))
+
+                if 0 <= tx < tex_w and 0 <= ty < tex_h:
+                    color = texture.get_at((tx, ty))
+                    set_pixel(surface, (x, y), color)
