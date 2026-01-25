@@ -37,40 +37,10 @@ while running:
 
     screen.fill((0, 0, 0))
 
-    angle += 0.02
-    time += 0.05
-
-    s = 1.0 + 0.3*math.sin(time)
-
-    m = functions.create_transform()
-    m = functions.multiply_matrix(functions.translation(-cx, -cy), m)
-    m = functions.multiply_matrix(functions.rotation(angle), m)
-    m = functions.multiply_matrix(functions.scale(s, s), m)
-    m = functions.multiply_matrix(functions.translation(cx, cy), m)
-
-    transformed_polygon = functions.transform(m, polygon)
-
-    functions.draw_polygon(screen, transformed_polygon, (255, 255, 255))
-    functions.scanline_fill(screen, transformed_polygon, (0, 200, 0))
-
-    xs = [p[0] for p in transformed_polygon]
-    ys = [p[1] for p in transformed_polygon]
-    margin = 20
-    window_zoom = (min(xs)- margin, min(ys)-margin, max(xs)+margin, max(ys)+margin)
-    
-    #MINIMAPA
-    mmini = functions.window_viewport(window_world, viewport_minimap)
-    polimini = functions.transform(mmini, transformed_polygon)
-    functions.draw_polygon(screen, polimini, (200, 200, 200))
-    functions.scanline_fill(screen, polimini, (0, 120, 0))
-    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(10, 10, 150, 110), 1)
-
-    #Zoom
-    mzoom = functions.window_viewport(window_zoom, viewport_zoom)
-    polzoom = functions.transform(mzoom, transformed_polygon)
-    functions.draw_polygon(screen, polzoom, (255, 255, 0))
-    functions.scanline_fill(screen, polzoom, (200, 200, 0))
-    pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(330, 10, 160, 110), 1)
+    functions.draw_elipse(screen, (200, 200), 100, 100, (255, 0, 0))
+    functions.scanline_elipses(screen, (200, 200), 100, 100, (255, 0, 0))
+    # functions.draw_circle(screen, (200, 200), 50, (255, 255, 255))
+    # functions.flood_fill(screen, (200, 200), (255, 0, 0), (255, 255, 255))
 
     pygame.display.flip()
 

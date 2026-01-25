@@ -133,27 +133,57 @@ def draw_circle(surface: Surface, center: coord_type, r: int, color: color_type)
     y = r
     d = 1 - r
     
+    incE = 2*x + 3
+    incSE = 2*(x - y) + 5
     plot8(surface, center, (x, y), color)
 
     while x < y:
         if d < 0:
-            d+=2*x + 3
+            d+= incE
         else:
-            d+=2*(x - y) + 5
+            d+= incSE
             y -=1
         x+=1
         plot8(surface, center, (x, y), color)
 
 def draw_elipse(surface: Surface, center: coord_type, a: int, b: int, color: color_type):
+    a2, b2 = a*a, b*b
     x = 0
     y = b
-    d = b**2 - (b + 1/4)*(a**2)
-    
-    #x²b² + y²a² = a²b²
-    #y² = -x²b²/a² + b²
-    #y = (-x²b²/a² + b²)**1/2
 
-    #x²/a² + y²/b² = x²/r² + y²/r² => x²(1/a² - 1/r²) + y²(1/b² - 1/r²)
+    dx = 2*x*b2
+    dy = 2*y*a2
+
+    d1 = b2 + ( (-1)*b + 1/4)*(a2)
+    
+    plot4(surface, center, (x, y), color)
+    while dx < dy:
+        plot4(surface, center, (x, y), color)
+        x+=1
+        dx += 2 * b2
+        if d1 < 0:
+            d1 += dx + b2
+        else:
+            y -= 1
+            dy -= 2 * a2
+            d1 += dx - dy + a2
+            
+    d2 = b2 * (x + 1/2)**2 + a2*(y - 1)**2 - a2*b2
+
+    while y >= 0:
+        plot4(surface, center, (x, y), color)
+        y -= 1
+        dy -= 2 * a2
+
+        if d2 > 0:
+            d2 += a2 - dy
+        else:
+            x+=1
+            dx += 2*b2
+            d2 += dx - dy + a2
+
+
+
 
 def flood_fill(surface: Surface, xy: coord_type, fill_color: color_type, border_color: color_type):
     width = surface.get_width()
@@ -179,7 +209,7 @@ def flood_fill(surface: Surface, xy: coord_type, fill_color: color_type, border_
         stack.append((x, y + 1))
         stack.append((x, y - 1))
 
-def scanline_fill(surface: Surface, vertices: list[coord_type], fill_color):
+def scanline_fill(surface: Surface, vertices: list[coord_type], fill_color: color_type):
     # Encontra Y minimo e máximo
     ys = [p[1] for p in vertices]
     y_min = int(min(ys))
@@ -222,6 +252,17 @@ def scanline_fill(surface: Surface, vertices: list[coord_type], fill_color):
                 for x in range(x_start, x_end + 1):
                     set_pixel(surface, (x, y), fill_color)
 
+def scanline_elipses(surface: Surface, center: coord_type, a: int, b:int, fill_color: color_type):
+    xc, yc = center
+
+    for y in range(-b, b + 1):
+        v = 1 - (y*y)/(b*b)
+        if v < 0:
+            continue
+        x = int(a * math.sqrt(v))
+        
+        for xi in range(-x, x + 1):
+            set_pixel(surface, (xc + xi, yc + y), fill_color)
 
 ## TRANSFORMAÇÕES
 def identity():
