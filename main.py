@@ -3,24 +3,32 @@ import pygame
 from entities.player import Player
 import functions
 
+#
+# MAPEAMENTO DAS TECLAS
+#
 
+key_map = {
+    #AÇÕES DO PLAYER
+    pygame.K_w: "UP",
+    pygame.K_a: "LEFT",
+    pygame.K_s: "DOWN",
+    pygame.K_d: "RIGHT"
+}
+
+#
+#INICIALIZA O DISPLAY
+#
+DISPLAY_CAPTION = 'Cat Vs Computer Graphics - MENU'
 pygame.init()
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("TESTES")
+pygame.display.set_caption(DISPLAY_CAPTION)
 clock = pygame.time.Clock()
 running = True
 
-
-
-polygon = [
-    (200, 150),
-    (300, 170),
-    (320, 240),
-    (250, 290),
-    (190, 230)
-]
-
+#
+#PROPORÇÃO DE TEXTURA PADRÃO PARA RETANGULOS
+#
 uvs_default = [
     (0.0, 0.0),
     (1.0, 0.0),
@@ -28,15 +36,14 @@ uvs_default = [
     (0.0, 1.0)
 ]
 
+#
+#DEFINE PLAYER
+#
 player = Player((200, 200))
 
-key_map = {
-    pygame.K_w: "UP",
-    pygame.K_a: "LEFT",
-    pygame.K_s: "DOWN",
-    pygame.K_d: "RIGHT"
-}
-
+#
+#JOGO RODANDO
+#
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
