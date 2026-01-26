@@ -21,7 +21,7 @@ key_map = {
 #
 DISPLAY_CAPTION = 'Cat Vs Computer Graphics - MENU'
 pygame.init()
-width, height = 400, 300
+width, height = 400, 320
 virtual_screen = pygame.Surface((width, height))
 screen = pygame.display.set_mode((width*2, 2*height), pygame.SRCALPHA, pygame.SCALED)
 pygame.display.set_caption(DISPLAY_CAPTION)
@@ -101,7 +101,7 @@ while running:
 
     scanline_texture(virtual_screen, player.show(), uvs_default, player.get_texture())
 
-    scaled = pygame.transform.scale(virtual_screen, (800, 600))
+    scaled = pygame.transform.scale(virtual_screen, (width*2, height*2))
     screen.blit(scaled, (0, 0))
 
 

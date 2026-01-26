@@ -1,17 +1,22 @@
-from wall import Wall
+from tile import Tile
 
 class Level_Controller:
     def __init__(self, surface, level=None):
         self.timer = 0
         self.total_time = 60*60*5 #5 horas do jogo -> 5 minutos da vida real
-        w = 15
+        w = 16
         sw = surface.get_width()
         sh = surface.get_height()
         self.WALLS = [
-            Wall((0, 0), w, sh),
-            Wall((sw - w, 0), w, sh),
-            Wall((w, 0), sw-2*w, w),
-            Wall((w, sh-w), sw-w*2, w)
+            #PAREDES DA BORDA
+            Tile((0, 0), w, sh),        #ESQUERDA
+            Tile((sw - w, 0), w, sh),   #DIREITA
+            Tile((w, 0), (sw-2*w)//2 - 16, w),    #CIMA
+            Tile((w + (sw - 2*w)//2 + 16, 0), (sw-2*w)//2 - 16, w),    #CIMA
+            Tile((w, sh-w), sw-w*2, w), #BAIXO
+
+
+
             ]
 
 

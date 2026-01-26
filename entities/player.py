@@ -71,7 +71,7 @@ class Player:
         if dir == 'UP':
             return level.iswall(x , y - self.sy/4)
         if dir == 'DOWN':
-            return level.iswall(x, y + self.sy/4)
+            return level.iswall(x, y + self.sy/2)
         return False
 
     def get_texture(self):
