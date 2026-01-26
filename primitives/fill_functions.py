@@ -1,4 +1,4 @@
-from draw_functions import *
+from primitives.draw_functions import *
 import math
 
 def flood_fill(surface: Surface, xy: coord_type, fill_color: color_type, border_color: color_type):

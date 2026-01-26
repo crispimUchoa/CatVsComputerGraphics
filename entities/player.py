@@ -62,6 +62,18 @@ class Player:
         self.set_dir(dir)
         self.walk(dir)
 
+    def is_coliding(self, dir, level):
+        x, y = self.pos
+        if dir == 'LEFT':
+            return level.iswall(x - self.sx/2, y)
+        if dir == 'RIGHT':
+            return level.iswall(x + self.sx/2, y)
+        if dir == 'UP':
+            return level.iswall(x , y - self.sy/2)
+        if dir == 'DOWN':
+            return level.iswall(x, y + self.sy/2)
+        return False
+
     def get_texture(self):
         if self.walking:
             if self.tick_loading % 3 == 0:

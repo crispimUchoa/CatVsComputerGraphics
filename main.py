@@ -1,7 +1,8 @@
-import math
 import pygame
 from entities.player import Player
-import functions
+from primitives.functions import scanline_texture
+from level_controller import Level_Controller
+
 
 #
 # MAPEAMENTO DAS TECLAS
@@ -40,10 +41,12 @@ uvs_default = [
 #DEFINE PLAYER
 #
 player = Player((200, 200))
+level = Level_Controller(screen)
 
 #
 #JOGO RODANDO
 #
+coliding = False
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -51,12 +54,15 @@ while running:
 
     keys = pygame.key.get_pressed()
     for key, dir in key_map.items():
-        if keys[key]:
+        
+        if keys[key] and not player.is_coliding(dir, level):
             player.move(dir)
+
+
     
     screen.fill((0, 0, 0))
 
-    functions.scanline_texture(screen, player.show(), uvs_default, player.get_texture())
+    scanline_texture(screen, player.show(), uvs_default, player.get_texture())
 
 
     pygame.display.flip()

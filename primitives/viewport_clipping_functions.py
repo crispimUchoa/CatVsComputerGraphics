@@ -1,4 +1,4 @@
-from transform_functions import *
+from primitives.transform_functions import *
 
 def window_viewport(window, viewport):
     Wxmin, Wymin, Wxmax, Wymax = window
