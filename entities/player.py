@@ -1,28 +1,35 @@
+from pygame.image import load
 
 class Player:
-    def __init__(self, position, texture):
+    def __init__(self, position, dir='DOWN'):
         self.pos = position
-        self.texture = texture
-        self.sx = 50
-        self.sy = 100
-        self.speed = 10
+        self.sprites = self.load_convert_sprites()
+        self.sx = 64
+        self.sy = 64
+        self.speed = 4
+        self.dir = dir
+        self.walking = False
+        self.walking_sprite = 0
+        self.tick_loading = 0
 
     def show(self):
         x, y = self.pos
         return [
-            (x - self.sx/2, y - self.sy),
-            (x + self.sx/2, y - self.sy),
-            (x + self.sx/2, y),
-            (x - self.sx/2, y)
+            (x - self.sx/2, y - self.sy/2),
+            (x + self.sx/2, y - self.sy/2),
+            (x + self.sx/2, y + self.sy/2),
+            (x - self.sx/2, y + self.sy/2)
         ]
     
     def left(self):
         x, y = self.pos
-        self.pos = (x - self.speed, y)
+        if self.dir == 'LEFT':
+            self.pos = (x - self.speed, y)
 
     def right(self):
         x, y = self.pos
-        self.pos = (x + self.speed, y)
+        if self.dir == 'RIGHT':
+            self.pos = (x + self.speed, y)
 
     def up(self):
         x, y = self.pos
@@ -32,16 +39,68 @@ class Player:
         x, y = self.pos
         self.pos = (x, y + self.speed)
 
+    def set_dir(self, dir:str):
+        if dir in ['LEFT', 'UP', 'DOWN', 'RIGHT'] and self.walking == False:
+            self.dir = dir
+
     def walk(self, dir):
-        x, y = self.pos
-
+        if dir != self.dir:
+            return
+        
+        self.walking = True
         directions = {
-            'A': self.left,
-            'D': self.right,
-            'W': self.up,
-            'S': self.down,
+            'LEFT': self.left,
+            'RIGHT': self.right,
+            'UP': self.up,
+            'DOWN': self.down,
         }
+        
+        if self.dir in ['UP', 'LEFT', 'DOWN', 'RIGHT']:
+            directions[self.dir]()
 
-        if dir in ['W', 'A', 'S', 'D']:
-            directions[dir]()
+    def move(self, dir):
+        self.set_dir(dir)
+        self.walk(dir)
 
+    def get_texture(self):
+        if self.walking:
+            if self.tick_loading % 3 == 0:
+                self.walking_sprite = (self.walking_sprite + 1) % 3
+            return self.sprites['WALKING'][self.dir][self.walking_sprite]
+        
+        return self.sprites['STAND'][self.dir]
+
+    def load_convert_sprites(self):
+        PLAYER_DOWN_STAND_SPRITE = load('./sprites/DOWN_STAND.png').convert()
+        PLAYER_RIGHT_STAND_SPRITE = load('./sprites/RIGHT_STAND.png').convert()
+        PLAYER_LEFT_STAND_SPRITE = load('./sprites/LEFT_STAND.png').convert()
+        PLAYER_UP_STAND_SPRITE = load('./sprites/UP_STAND.png').convert()
+
+        PLAYER_DOWN_WALKING_0_SPRITE = load('./sprites/DOWN_WALKING_0.png').convert()
+        PLAYER_DOWN_WALKING_1_SPRITE = load('./sprites/DOWN_WALKING_1.png').convert()
+        PLAYER_DOWN_WALKING_2_SPRITE = load('./sprites/DOWN_WALKING_2.png').convert()
+        PLAYER_UP_WALKING_0_SPRITE = load('./sprites/UP_WALKING_0.png').convert()
+        PLAYER_UP_WALKING_1_SPRITE = load('./sprites/UP_WALKING_1.png').convert()
+        PLAYER_UP_WALKING_2_SPRITE = load('./sprites/UP_WALKING_2.png').convert()
+        PLAYER_LEFT_WALKING_0_SPRITE = load('./sprites/LEFT_WALKING_0.png').convert()
+        PLAYER_LEFT_WALKING_1_SPRITE = load('./sprites/LEFT_WALKING_1.png').convert()
+        PLAYER_LEFT_WALKING_2_SPRITE = load('./sprites/LEFT_WALKING_2.png').convert()
+        PLAYER_RIGHT_WALKING_0_SPRITE = load('./sprites/RIGHT_WALKING_0.png').convert()
+        PLAYER_RIGHT_WALKING_1_SPRITE = load('./sprites/RIGHT_WALKING_1.png').convert()
+        PLAYER_RIGHT_WALKING_2_SPRITE = load('./sprites/RIGHT_WALKING_2.png').convert()
+
+
+        return { 
+            'STAND':{
+                'DOWN': PLAYER_DOWN_STAND_SPRITE,
+                'RIGHT': PLAYER_RIGHT_STAND_SPRITE,
+                'LEFT': PLAYER_LEFT_STAND_SPRITE,
+                'UP': PLAYER_UP_STAND_SPRITE,
+            },
+            'WALKING':{
+                'DOWN': [PLAYER_DOWN_WALKING_0_SPRITE, PLAYER_DOWN_WALKING_1_SPRITE, PLAYER_DOWN_WALKING_2_SPRITE],
+                'UP': [PLAYER_UP_WALKING_0_SPRITE, PLAYER_UP_WALKING_1_SPRITE, PLAYER_UP_WALKING_2_SPRITE],
+                'RIGHT': [PLAYER_RIGHT_WALKING_0_SPRITE, PLAYER_RIGHT_WALKING_1_SPRITE, PLAYER_RIGHT_WALKING_2_SPRITE],
+                'LEFT': [PLAYER_LEFT_WALKING_0_SPRITE, PLAYER_LEFT_WALKING_1_SPRITE, PLAYER_LEFT_WALKING_2_SPRITE],
+            }
+        }
