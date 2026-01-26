@@ -1,5 +1,7 @@
 from pygame.image import load
 
+from primitives.fill_functions import scanline_texture
+
 class Player:
     def __init__(self, position, dir='DOWN'):
         self.pos = position
@@ -12,7 +14,7 @@ class Player:
         self.walking_sprite = 0
         self.tick_loading = 0
 
-    def show(self):
+    def get_vertices(self):
         x, y = self.pos
         return [
             (x - self.sx/2, y - self.sy/2),
@@ -21,6 +23,10 @@ class Player:
             (x - self.sx/2, y + self.sy/2)
         ]
     
+    def show(self, surface, uvs_default):
+        scanline_texture(surface, self.get_vertices(), uvs_default, self.get_texture())
+
+
     def left(self):
         x, y = self.pos
         if self.dir == 'LEFT':
@@ -65,9 +71,9 @@ class Player:
     def is_coliding(self, dir, level):
         x, y = self.pos
         if dir == 'LEFT':
-            return ( x-self.sx/2 <= 0) or level.iswall(x - self.sx/2, y - self.sy/2) or level.iswall(x - self.sx/2, y + self.sy/4)
+            return ( x-self.sx/2 <= 0) or level.iswall(x - self.sx/2, y)
         if dir == 'RIGHT':
-            return ( x+self.sx/2 > level.sw) or level.iswall(x + self.sx/2, y) or level.iswall(x + self.sx/2, y + self.sy/4)
+            return ( x+self.sx/2 > level.sw) or level.iswall(x + self.sx/2, y)
         if dir == 'UP':
             return ( y-self.sx/4 <= 0) or level.iswall(x - self.sx/4 , y - self.sy/4) or level.iswall(x + self.sx/4, y - self.sy/4)
         if dir == 'DOWN':

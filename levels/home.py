@@ -1,4 +1,12 @@
-from tile import Tile
+from entities.level import Level
+# from levels.street import level_street
+from pygame.image import load
+
+from entities.skip_level import Skip_Level
+HOUSE_WALL_SPRITE = load('./sprites/tiles/HOUSE_WALL.png').convert()
+HOUSE_WALL_FRONT_SPRITE = load('./sprites/tiles/HOUSE_WALL_FRONT.jpeg').convert()
+HOUSE_GROUND_SPRITE = load('./sprites/tiles/HOUSE_GROUND.png').convert()
+
 
 tile_map = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
@@ -23,44 +31,10 @@ tile_map = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
         ]
 
+tile_code = {
+    0: HOUSE_GROUND_SPRITE,
+    1: HOUSE_WALL_SPRITE,
+    2: HOUSE_WALL_FRONT_SPRITE
+}
 
-
-class Level_Controller:
-    def __init__(self, surface, level=None):
-        self.timer = 0
-        self.total_time = 60*60*5 #5 horas do jogo -> 5 minutos da vida real
-        w = 16
-        self.sw = surface.get_width()
-        self.sh = surface.get_height()
-        self.WALLS: list[Tile] = []
-        for i in range(20):
-            for j in range(25):
-                i16 = i*16
-                j16 = j*16
-                if tile_map[i][j] > 2:
-                    self.WALLS.append(Tile((j16, i16), w, w, sprite=tile_map[i][j]))
-        # self.WALLS = [
-        #     #PAREDES DA BORDA
-        #     Tile((0, 0), w, sh),        #ESQUERDA
-        #     Tile((sw - w, 0), w, sh),   #DIREITA
-        #     Tile((w, 0), (sw-2*w)//2 - 16, w),    #CIMA
-        #     Tile((w + (sw - 2*w)//2 + 16, 0), (sw-2*w)//2 - 16, w),    #CIMA
-        #     Tile((w, sh-w), sw-w*2, w), #BAIXO
-
-        #     ]
-
-
-    def iswall(self, x, y):
-        for wall in self.WALLS:
-            if wall.position[0] <= x <= wall.position[0] + wall.width and wall.position[1] <= y <= wall.position[1] + wall.height:
-                return True
-        return False  
-    
-    def increse_timer(self):
-        self.timer+=1
-    
-    def get_timer_in_hm(self):
-        timer = self.timer// 60
-        h = (timer // 60) + 5
-        m = timer % 60
-        return f'{h:02d}:{m:02d}'
+level_home = Level(tile_map, tile_code, (200, 150), Skip_Level((12*16, 0), 1))
