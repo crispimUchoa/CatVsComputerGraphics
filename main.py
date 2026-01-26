@@ -29,7 +29,11 @@ clock = pygame.time.Clock()
 running = True
 
 HOUSE_WALL_SPRITE = pygame.image.load('./sprites/tiles/HOUSE_WALL.png').convert()
+HOUSE_WALL_FRONT_SPRITE = pygame.image.load('./sprites/tiles/HOUSE_WALL_FRONT.jpeg').convert()
 HOUSE_GROUND_SPRITE = pygame.image.load('./sprites/tiles/HOUSE_GROUND.png').convert()
+
+HOUSE_WALL_SPRITES = [HOUSE_WALL_SPRITE, HOUSE_WALL_FRONT_SPRITE]
+
 #
 #PROPORÇÃO DE TEXTURA PADRÃO PARA RETANGULOS
 #
@@ -78,7 +82,8 @@ for wall in walls:
     (repeat_x, repeat_y),
     (0.0, repeat_y)
 ]
-    scanline_texture(static_surface, [(wall.position[0], wall.position[1]), (wall.position[0] + wall.width, wall.position[1]), (wall.position[0] + wall.width, wall.position[1] + wall.height), (wall.position[0], wall.position[1] + wall.height)], uvs_tiling, HOUSE_WALL_SPRITE)
+    print(wall.sprite)
+    scanline_texture(static_surface, [(wall.position[0], wall.position[1]), (wall.position[0] + wall.width, wall.position[1]), (wall.position[0] + wall.width, wall.position[1] + wall.height), (wall.position[0], wall.position[1] + wall.height)], uvs_tiling, HOUSE_WALL_SPRITES[wall.sprite-1])
 
 while running:
     clock.tick(60)

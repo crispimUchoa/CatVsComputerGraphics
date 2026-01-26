@@ -3,6 +3,7 @@ class Tile:
         self.position = position
         self.width = width
         self.height = height
+        self.sprite = sprite
 
         self.tile_map = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
