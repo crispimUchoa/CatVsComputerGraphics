@@ -4,9 +4,9 @@ class Player:
     def __init__(self, position, dir='DOWN'):
         self.pos = position
         self.sprites = self.load_convert_sprites()
-        self.sx = 64
-        self.sy = 64
-        self.speed = 4
+        self.sx = 32
+        self.sy = 32
+        self.speed = 2
         self.dir = dir
         self.walking = False
         self.walking_sprite = 0
@@ -69,9 +69,9 @@ class Player:
         if dir == 'RIGHT':
             return level.iswall(x + self.sx/2, y)
         if dir == 'UP':
-            return level.iswall(x , y - self.sy/2)
+            return level.iswall(x , y - self.sy/4)
         if dir == 'DOWN':
-            return level.iswall(x, y + self.sy/2)
+            return level.iswall(x, y + self.sy/4)
         return False
 
     def get_texture(self):
@@ -92,23 +92,23 @@ class Player:
         DIR = './sprites/player/'
         STAND_DIR = DIR + 'stand'
         MOVING_DIR = DIR + 'moving'
-        PLAYER_DOWN_STAND_SPRITE = load(f'{STAND_DIR}/DOWN_STAND.png').convert()
-        PLAYER_RIGHT_STAND_SPRITE = load(f'{STAND_DIR}/RIGHT_STAND.png').convert()
-        PLAYER_LEFT_STAND_SPRITE = load(f'{STAND_DIR}/LEFT_STAND.png').convert()
-        PLAYER_UP_STAND_SPRITE = load(f'{STAND_DIR}/UP_STAND.png').convert()
+        PLAYER_DOWN_STAND_SPRITE = load(f'{STAND_DIR}/DOWN_STAND.png').convert_alpha()
+        PLAYER_RIGHT_STAND_SPRITE = load(f'{STAND_DIR}/RIGHT_STAND.png').convert_alpha()
+        PLAYER_LEFT_STAND_SPRITE = load(f'{STAND_DIR}/LEFT_STAND.png').convert_alpha()
+        PLAYER_UP_STAND_SPRITE = load(f'{STAND_DIR}/UP_STAND.png').convert_alpha()
 
-        PLAYER_DOWN_WALKING_0_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_0.png').convert()
-        PLAYER_DOWN_WALKING_1_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_1.png').convert()
-        PLAYER_DOWN_WALKING_2_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_2.png').convert()
-        PLAYER_UP_WALKING_0_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_0.png').convert()
-        PLAYER_UP_WALKING_1_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_1.png').convert()
-        PLAYER_UP_WALKING_2_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_2.png').convert()
-        PLAYER_LEFT_WALKING_0_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_0.png').convert()
-        PLAYER_LEFT_WALKING_1_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_1.png').convert()
-        PLAYER_LEFT_WALKING_2_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_2.png').convert()
-        PLAYER_RIGHT_WALKING_0_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_0.png').convert()
-        PLAYER_RIGHT_WALKING_1_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_1.png').convert()
-        PLAYER_RIGHT_WALKING_2_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_2.png').convert()
+        PLAYER_DOWN_WALKING_0_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_0.png').convert_alpha()
+        PLAYER_DOWN_WALKING_1_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_1.png').convert_alpha()
+        PLAYER_DOWN_WALKING_2_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_2.png').convert_alpha()
+        PLAYER_UP_WALKING_0_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_0.png').convert_alpha()
+        PLAYER_UP_WALKING_1_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_1.png').convert_alpha()
+        PLAYER_UP_WALKING_2_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_2.png').convert_alpha()
+        PLAYER_LEFT_WALKING_0_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_0.png').convert_alpha()
+        PLAYER_LEFT_WALKING_1_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_1.png').convert_alpha()
+        PLAYER_LEFT_WALKING_2_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_2.png').convert_alpha()
+        PLAYER_RIGHT_WALKING_0_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_0.png').convert_alpha()
+        PLAYER_RIGHT_WALKING_1_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_1.png').convert_alpha()
+        PLAYER_RIGHT_WALKING_2_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_2.png').convert_alpha()
 
 
         return { 

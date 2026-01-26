@@ -134,9 +134,14 @@ def scanline_texture(surface: Surface, vertices, uvs, texture):
                 u = u_start + t * (u_end - u_start)
                 v = v_start + t * (v_end - v_start)
 
+                u = u % 1
+                v = v % 1
+
                 tx = int(u * (tex_w - 1))
                 ty = int(v * (tex_h - 1))
 
                 if 0 <= tx < tex_w and 0 <= ty < tex_h:
                     color = texture.get_at((tx, ty))
+                    if color.a == 0:
+                        continue
                     set_pixel(surface, (x, y), color)
