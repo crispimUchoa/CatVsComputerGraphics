@@ -71,23 +71,26 @@ class Player:
         return self.sprites['STAND'][self.dir]
 
     def load_convert_sprites(self):
-        PLAYER_DOWN_STAND_SPRITE = load('./sprites/DOWN_STAND.png').convert()
-        PLAYER_RIGHT_STAND_SPRITE = load('./sprites/RIGHT_STAND.png').convert()
-        PLAYER_LEFT_STAND_SPRITE = load('./sprites/LEFT_STAND.png').convert()
-        PLAYER_UP_STAND_SPRITE = load('./sprites/UP_STAND.png').convert()
+        DIR = './sprites/player/'
+        STAND_DIR = DIR + 'stand'
+        MOVING_DIR = DIR + 'moving'
+        PLAYER_DOWN_STAND_SPRITE = load(f'{STAND_DIR}/DOWN_STAND.png').convert()
+        PLAYER_RIGHT_STAND_SPRITE = load(f'{STAND_DIR}/RIGHT_STAND.png').convert()
+        PLAYER_LEFT_STAND_SPRITE = load(f'{STAND_DIR}/LEFT_STAND.png').convert()
+        PLAYER_UP_STAND_SPRITE = load(f'{STAND_DIR}/UP_STAND.png').convert()
 
-        PLAYER_DOWN_WALKING_0_SPRITE = load('./sprites/DOWN_WALKING_0.png').convert()
-        PLAYER_DOWN_WALKING_1_SPRITE = load('./sprites/DOWN_WALKING_1.png').convert()
-        PLAYER_DOWN_WALKING_2_SPRITE = load('./sprites/DOWN_WALKING_2.png').convert()
-        PLAYER_UP_WALKING_0_SPRITE = load('./sprites/UP_WALKING_0.png').convert()
-        PLAYER_UP_WALKING_1_SPRITE = load('./sprites/UP_WALKING_1.png').convert()
-        PLAYER_UP_WALKING_2_SPRITE = load('./sprites/UP_WALKING_2.png').convert()
-        PLAYER_LEFT_WALKING_0_SPRITE = load('./sprites/LEFT_WALKING_0.png').convert()
-        PLAYER_LEFT_WALKING_1_SPRITE = load('./sprites/LEFT_WALKING_1.png').convert()
-        PLAYER_LEFT_WALKING_2_SPRITE = load('./sprites/LEFT_WALKING_2.png').convert()
-        PLAYER_RIGHT_WALKING_0_SPRITE = load('./sprites/RIGHT_WALKING_0.png').convert()
-        PLAYER_RIGHT_WALKING_1_SPRITE = load('./sprites/RIGHT_WALKING_1.png').convert()
-        PLAYER_RIGHT_WALKING_2_SPRITE = load('./sprites/RIGHT_WALKING_2.png').convert()
+        PLAYER_DOWN_WALKING_0_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_0.png').convert()
+        PLAYER_DOWN_WALKING_1_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_1.png').convert()
+        PLAYER_DOWN_WALKING_2_SPRITE = load(f'{MOVING_DIR}/DOWN_WALKING_2.png').convert()
+        PLAYER_UP_WALKING_0_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_0.png').convert()
+        PLAYER_UP_WALKING_1_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_1.png').convert()
+        PLAYER_UP_WALKING_2_SPRITE = load(f'{MOVING_DIR}/UP_WALKING_2.png').convert()
+        PLAYER_LEFT_WALKING_0_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_0.png').convert()
+        PLAYER_LEFT_WALKING_1_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_1.png').convert()
+        PLAYER_LEFT_WALKING_2_SPRITE = load(f'{MOVING_DIR}/LEFT_WALKING_2.png').convert()
+        PLAYER_RIGHT_WALKING_0_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_0.png').convert()
+        PLAYER_RIGHT_WALKING_1_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_1.png').convert()
+        PLAYER_RIGHT_WALKING_2_SPRITE = load(f'{MOVING_DIR}/RIGHT_WALKING_2.png').convert()
 
 
         return { 
