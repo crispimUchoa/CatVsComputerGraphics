@@ -68,6 +68,6 @@ while running:
     pygame.display.flip()
 
     clock.tick(60)
-    player.after_tick_status()
+    player.status_after_tick()
 
 pygame.quit()

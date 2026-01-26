@@ -82,7 +82,7 @@ class Player:
         
         return self.sprites['STAND'][self.dir]
 
-    def after_tick_status(self):
+    def status_after_tick(self):
         self.walking = False
         self.tick_loading +=1
         if self.tick_loading >=60:

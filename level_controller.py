@@ -1,5 +1,5 @@
 class Level_Controller:
-    def __init__(self, surface):
+    def __init__(self, surface, level=None):
         self.WALL = {
                 'position': (0,0),
                 'height': surface.get_height(),
