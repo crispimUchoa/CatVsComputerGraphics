@@ -21,26 +21,13 @@ polygon = [
     (190, 230)
 ]
 
-uvs_polygon = [
+uvs_default = [
     (0.0, 0.0),
     (1.0, 0.0),
     (1.0, 1.0),
     (0.0, 1.0)
 ]
 
-cx = sum(p[0] for p in polygon) / len(polygon)
-cy = sum(p[1] for p in polygon) / len(polygon)
-
-angle = 0
-time = 0
-
-#viewports
-
-viewport_minimap = (10, 10, 160, 120)
-viewport_zoom = (330, 10, 490, 120)
-window_world = (0, 0, width, height)
-angle = 0
-time = 0
 player = Player((200, 200))
 
 key_map = {
@@ -62,7 +49,7 @@ while running:
     
     screen.fill((0, 0, 0))
 
-    functions.scanline_texture(screen, player.show(), uvs_polygon, player.get_texture())
+    functions.scanline_texture(screen, player.show(), uvs_default, player.get_texture())
 
 
     pygame.display.flip()
