@@ -30,14 +30,14 @@ class Level_Controller:
         self.timer = 0
         self.total_time = 60*60*5 #5 horas do jogo -> 5 minutos da vida real
         w = 16
-        sw = surface.get_width()
-        sh = surface.get_height()
+        self.sw = surface.get_width()
+        self.sh = surface.get_height()
         self.WALLS: list[Tile] = []
         for i in range(20):
             for j in range(25):
                 i16 = i*16
                 j16 = j*16
-                if tile_map[i][j] > 0:
+                if tile_map[i][j] > 2:
                     self.WALLS.append(Tile((j16, i16), w, w, sprite=tile_map[i][j]))
         # self.WALLS = [
         #     #PAREDES DA BORDA

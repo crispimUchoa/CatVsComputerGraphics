@@ -65,13 +65,13 @@ class Player:
     def is_coliding(self, dir, level):
         x, y = self.pos
         if dir == 'LEFT':
-            return level.iswall(x - self.sx/2, y - self.sy/2) or level.iswall(x - self.sx/2, y + self.sy/4)
+            return ( x-self.sx/2 <= 0) or level.iswall(x - self.sx/2, y - self.sy/2) or level.iswall(x - self.sx/2, y + self.sy/4)
         if dir == 'RIGHT':
-            return level.iswall(x + self.sx/2, y) or level.iswall(x + self.sx/2, y + self.sy/4)
+            return ( x+self.sx/2 > level.sw) or level.iswall(x + self.sx/2, y) or level.iswall(x + self.sx/2, y + self.sy/4)
         if dir == 'UP':
-            return level.iswall(x - self.sx/4 , y - self.sy/4) or level.iswall(x + self.sx/4, y - self.sy/4)
+            return ( y-self.sx/4 <= 0) or level.iswall(x - self.sx/4 , y - self.sy/4) or level.iswall(x + self.sx/4, y - self.sy/4)
         if dir == 'DOWN':
-            return level.iswall(x - self.sx/4, y + self.sy/2) or level.iswall(x + self.sx/4, y + self.sy/2)
+            return ( y+self.sx/2 > level.sh) or level.iswall(x - self.sx/4, y + self.sy/2) or level.iswall(x + self.sx/4, y + self.sy/2)
         return False
 
     def get_texture(self):
