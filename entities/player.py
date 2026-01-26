@@ -70,6 +70,12 @@ class Player:
         
         return self.sprites['STAND'][self.dir]
 
+    def after_tick_status(self):
+        self.walking = False
+        self.tick_loading +=1
+        if self.tick_loading >=60:
+            self.tick_loading = 0
+
     def load_convert_sprites(self):
         DIR = './sprites/player/'
         STAND_DIR = DIR + 'stand'

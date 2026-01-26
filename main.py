@@ -55,7 +55,6 @@ while running:
     pygame.display.flip()
 
     clock.tick(60)
-    player.tick_loading += 1
-    player.walking = False
+    player.after_tick_status()
 
 pygame.quit()
