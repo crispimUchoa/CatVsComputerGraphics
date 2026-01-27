@@ -42,4 +42,4 @@ tile_code = {
     5: PAVEMENT_SPRITE
 }
 
-level_street = Level(tile_map, tile_code, (360, 298), Skip_Level( (360, 208), 0))
+level_street = Level(tile_map, tile_code, (360, 298), Skip_Level( (21*16, 304), 0))

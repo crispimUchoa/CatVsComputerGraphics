@@ -77,7 +77,6 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                print(level.skip_level.next_level)
                 level.isskip(player, LEVELS[level.skip_level.next_level])
 
     keys = pygame.key.get_pressed()

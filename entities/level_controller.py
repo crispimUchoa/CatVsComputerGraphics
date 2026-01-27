@@ -1,6 +1,6 @@
 from entities.level import Level
 from entities.skip_level import Skip_Level
-from primitives.fill_functions import scanline_texture
+from primitives.fill_functions import scanline_fill, scanline_texture
 from tile import Tile
 
 class Level_Controller:
@@ -41,6 +41,7 @@ class Level_Controller:
 
         player.pos = level.player_pos
         self.set_tiles(self.static_surface)
+        x, y = self.skip_level.pos
 
     def iswall(self, x, y):
         for wall in self.WALLS:

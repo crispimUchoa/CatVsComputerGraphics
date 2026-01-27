@@ -8,8 +8,9 @@ class Skip_Level:
     def check_player_colision(self, player_pos):
         px, py = player_pos
         x, y = self.pos
-
-        if x <= px <= x + self.w and y <= py <= self.h:
+        
+        
+        if x <= px <= x + self.w and y <= py <= y +self.h:
             return True
 
 
