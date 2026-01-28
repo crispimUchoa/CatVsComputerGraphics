@@ -4,7 +4,8 @@ from primitives.fill_functions import scanline_fill, scanline_texture
 from tile import Tile
 
 class Level_Controller:
-    def __init__(self, surface, static_surface, gradient_surface):
+    def __init__(self, surface, static_surface, gradient_surface, bus_surface):
+        self.bus_surface = bus_surface
         self.gradient_surface = gradient_surface
         self.GROUND = 0
         self.level = None
@@ -29,7 +30,7 @@ class Level_Controller:
         self.level = level
         self.skip_level = level.skip
         self.player_pos = level.player_pos
-        surface = [ self.surface, self.static_surface, self.gradient_surface] if self.level.name == 'classroom' else self.static_surface
+        surface = [ self.surface, self.static_surface, self.gradient_surface, self.bus_surface] 
         level.draw_level(surface, self.uvs_default_tiling)
 
         player.pos = level.player_pos

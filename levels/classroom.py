@@ -6,7 +6,7 @@ from primitives.fill_functions import scanline_fill_gradient
 
 
 def draw_details(surfaces):
-    surface, static_surface, gradient_surface = surfaces
+    _, _, gradient_surface, _ = surfaces
     width = 400
     height = 320
     c1 = (127, 0, 127)

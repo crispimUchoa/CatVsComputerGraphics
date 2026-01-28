@@ -61,7 +61,9 @@ gradient_surface = pygame.Surface((width, height))
 #DEFINE PLAYER
 #
 static_surface = pygame.Surface((width, height))
-level = Level_Controller(virtual_screen, static_surface, gradient_surface)
+bus_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+
+level = Level_Controller(virtual_screen, static_surface, gradient_surface, bus_surface)
 player = Player((0, 0))
 level.set_level(level_street, player)
 # scanline_texture(static_surface, [ (width - 22*16, height - 15*16),(width, height - 15*16),(width, height - 7*16),(width - 22*16, height - 7*16) ], uvs_default, BUS_SPRITE)
@@ -152,7 +154,10 @@ while running:
     level.show_timer_bar()
 
     scaled = pygame.transform.scale(virtual_screen, (width*2, height*2))
+    scaled_bus = pygame.transform.scale(bus_surface, (width*2, height*2))
     screen.blit(scaled, (0, 0))
+    if level.level == level_street:
+        screen.blit(scaled_bus, (0, 0)) 
 
     pygame.display.flip()
 

@@ -47,27 +47,43 @@ tile_code = {
 }
 
 
-def street_details(static_surface):
+def street_details(surfaces):
+    _, static_surface, _, bus_surface = surfaces
     w = static_surface.get_width()
     h = static_surface.get_height()
     bw = 344
     bh = 120
-
-    uvs_bus = [
+    bot_size = 0.1
+    uvs_bus_bottom = [
         (0, 1),
         (1, 1),
+        (1, bot_size),
+        (0, bot_size),
+    ]
+
+    uvs_bus_top = [
+        (0, (1 - bot_size)),
+        (1, 1 - bot_size),
         (1, 0),
         (0, 0),
     ]
 
-    bus_vertices = [
+    bus_vertices_bottom = [
         (w - bw, h - 7*16),
         (w, h - 7*16),
+        (w, h - 7*16 - bh*(1 - bot_size)),
+        (w - bw, h - 7*16 - bh*(1-bot_size)),
+    ]
+
+    bus_vertices_top = [
+        (w - bw, h - 7*16 - bh*bot_size),
+        (w, h - 7*16 - bh*bot_size),
         (w, h - 7*16 - bh),
         (w - bw, h - 7*16 - bh),
     ]
 
-    scanline_texture(static_surface, bus_vertices, uvs_bus, BUS_SPRITE)
+    scanline_texture(static_surface, bus_vertices_bottom, uvs_bus_bottom, BUS_SPRITE)
+    scanline_texture(bus_surface, bus_vertices_top, uvs_bus_top, BUS_SPRITE)
 
 
 level_street = Level(tile_map, tile_code, (32, 298), [Skip_Level( (1*16, 304), 0), Skip_Level( (328, 176), 2, h=48)], name='street', details=street_details)

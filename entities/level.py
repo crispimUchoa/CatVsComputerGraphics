@@ -57,8 +57,10 @@ class Level:
     def draw_details(self, static_surface):
         self.details(static_surface)
 
-    def draw_level(self, static_surface, uvs):
+    def draw_level(self, surfaces, uvs):
+        _, static_surface, _, _ = surfaces
+
         if self.name != 'classroom':
             self.draw_tiles(static_surface, uvs)
         if self.details:
-            self.draw_details(static_surface)
+            self.draw_details(surfaces)
