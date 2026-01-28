@@ -32,7 +32,6 @@ pygame.display.set_caption(DISPLAY_CAPTION)
 clock = pygame.time.Clock()
 running = True
 
-BUS_SPRITE = pygame.image.load('./sprites/bus.png').convert_alpha()
 
 
 
@@ -40,7 +39,10 @@ from levels.home import level_home
 from levels.classroom import level_classroom
 from levels.street import level_street
 
-LEVELS = [level_home, level_street]
+level_home.skip[0].next_level = level_street
+level_street.skip[0].next_level = level_home
+level_street.skip[1].next_level = level_classroom
+
 
 #
 #PROPORÇÃO DE TEXTURA PADRÃO PARA RETANGULOS
@@ -59,9 +61,9 @@ gradient_surface = pygame.Surface((width, height))
 #DEFINE PLAYER
 #
 static_surface = pygame.Surface((width, height))
-level = Level_Controller(virtual_screen, static_surface)
+level = Level_Controller(virtual_screen, static_surface, gradient_surface)
 player = Player((0, 0))
-level.set_level(level_home, player)
+level.set_level(level_street, player)
 # scanline_texture(static_surface, [ (width - 22*16, height - 15*16),(width, height - 15*16),(width, height - 7*16),(width - 22*16, height - 7*16) ], uvs_default, BUS_SPRITE)
 #
 #JOGO RODANDO
@@ -112,7 +114,7 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                level.isskip(player, LEVELS[level.skip_level.next_level])
+                level.isskip(player)
 
     keys = pygame.key.get_pressed()
     for key, dir in key_map.items():
@@ -122,9 +124,10 @@ while running:
 
     virtual_screen.blit(static_surface, (0, 0))
         
-    offset = (offset - 4) % height
-    # virtual_screen.blit(gradient_surface, (0, offset - height))
-    # virtual_screen.blit(gradient_surface, (0, offset))
+    if level.level == level_classroom:
+        offset = (offset - 4) % height
+        virtual_screen.blit(gradient_surface, (0, offset - height))
+        virtual_screen.blit(gradient_surface, (0, offset))
     
     angle +=0.02
     time += 0.05

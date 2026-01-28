@@ -1,9 +1,9 @@
 class Skip_Level:
-    def __init__(self, pos, next_level):
+    def __init__(self, pos, next_level, w=48, h=16):
         self.pos = pos
         self.next_level = next_level
-        self.w = 16*3
-        self.h = 16
+        self.w = w
+        self.h = h
 
     def check_player_colision(self, player_pos):
         px, py = player_pos

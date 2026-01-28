@@ -4,7 +4,7 @@ from tile import Tile
 
 
 class Level:
-    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: Skip_Level | None, details = None, name='', w=16):
+    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, name='', w=16):
         self.tile_map = tile_map
         self.tile_code = tile_code
         self.player_pos = player_pos
@@ -54,5 +54,11 @@ class Level:
             self.draw_tile(self.ground_details, static_surface)
 
 
-    def draw_details(self):
-        self.details()
+    def draw_details(self, static_surface):
+        self.details(static_surface)
+
+    def draw_level(self, static_surface, uvs):
+        if self.name != 'classroom':
+            self.draw_tiles(static_surface, uvs)
+        if self.details:
+            self.draw_details(static_surface)

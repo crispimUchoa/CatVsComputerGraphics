@@ -5,12 +5,13 @@ from pygame.image import load
 from primitives.fill_functions import scanline_fill_gradient
 
 
-def draw_details(surface):
+def draw_details(surfaces):
+    surface, static_surface, gradient_surface = surfaces
     width = 400
     height = 320
     c1 = (127, 0, 127)
     c2 = (196, 32, 127)
-    scanline_fill_gradient(surface, 
+    scanline_fill_gradient(gradient_surface, 
                         [
                             (0, 0), (width, 0), (width, height/2),(width, height), (0, height), (0, height/2)
                         ],
@@ -21,4 +22,4 @@ def draw_details(surface):
                         )
 
 
-level_classroom = Level([], dict(), (12*16, 32), None, details=draw_details, name='classroom')
+level_classroom = Level([], dict(), (12*16, 32), [], details=draw_details, name='classroom')

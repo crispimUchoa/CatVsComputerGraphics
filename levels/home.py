@@ -37,4 +37,4 @@ tile_code = {
     2: HOUSE_WALL_FRONT_SPRITE
 }
 
-level_home = Level(tile_map, tile_code, (12*16, 32), Skip_Level((11*16, 0), 1))
+level_home = Level(tile_map, tile_code, (12*16, 32), [Skip_Level((11*16, 0), 1)], name='home')
