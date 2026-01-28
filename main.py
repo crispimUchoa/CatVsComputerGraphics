@@ -61,13 +61,13 @@ gradient_surface = pygame.Surface((width, height))
 static_surface = pygame.Surface((width, height))
 level = Level_Controller(virtual_screen, static_surface)
 player = Player((0, 0))
-level.set_level(level_classroom, player)
+level.set_level(level_home, player)
 # scanline_texture(static_surface, [ (width - 22*16, height - 15*16),(width, height - 15*16),(width, height - 7*16),(width - 22*16, height - 7*16) ], uvs_default, BUS_SPRITE)
 #
 #JOGO RODANDO
 #
 coliding = False
-walls = level.WALLS
+walls = level.level.walls
 
 def draw_details(surface):
     width = 400
@@ -111,7 +111,7 @@ while running:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN and level.skip_level and level.skip_level.next_level:
+            if event.key == pygame.K_RETURN:
                 level.isskip(player, LEVELS[level.skip_level.next_level])
 
     keys = pygame.key.get_pressed()
@@ -123,8 +123,8 @@ while running:
     virtual_screen.blit(static_surface, (0, 0))
         
     offset = (offset - 4) % height
-    virtual_screen.blit(gradient_surface, (0, offset - height))
-    virtual_screen.blit(gradient_surface, (0, offset))
+    # virtual_screen.blit(gradient_surface, (0, offset - height))
+    # virtual_screen.blit(gradient_surface, (0, offset))
     
     angle +=0.02
     time += 0.05
@@ -139,10 +139,10 @@ while running:
     # pho2 = transform(m, professor_head_out_2)
     phin = transform(m, professor_head_in)
 
-    scanline_fill(virtual_screen, professor_body, (32, 32, 32))
-    scanline_fill(virtual_screen, pho1, (32, 32, 32))
+    # scanline_fill(virtual_screen, professor_body, (32, 32, 32))
+    # scanline_fill(virtual_screen, pho1, (32, 32, 32))
     # draw_polygon(virtual_screen, pho2, (32, 32, 32))
-    scanline_fill(virtual_screen, phin, 'black')
+    # scanline_fill(virtual_screen, phin, 'black')
 
 
     player.show(virtual_screen, uvs_default)

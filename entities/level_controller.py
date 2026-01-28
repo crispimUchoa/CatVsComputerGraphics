@@ -29,25 +29,13 @@ class Level_Controller:
         self.skip_level = level.skip
         self.player_pos = level.player_pos
 
-        self.WALLS: list[Tile] = []
-        self.GROUND_DETAILS: list[Tile] = []
         if level.tile_map:
-            self.GROUND = level.tile_code[0]
-            for i in range(20):
-                for j in range(25):
-                    iw = i*self.w
-                    jw = j*self.w
-                    if 0 < level.tile_map[i][j] <=2 :
-                        self.WALLS.append(Tile((jw, iw), self.w, self.w, sprite=level.tile_code[level.tile_map[i][j]]))
-                    elif level.tile_map[i][j] > 2:
-                        self.GROUND_DETAILS.append(Tile((jw, iw), self.w, self.w, sprite=level.tile_code[level.tile_map[i][j]]))
-        
-            self.set_tiles(self.static_surface)
+            level.draw_tiles(self.static_surface, self.uvs_default_tiling)
 
         player.pos = level.player_pos
 
     def iswall(self, x, y):
-        for wall in self.WALLS:
+        for wall in self.level.walls:
             if wall.position[0] <= x <= wall.position[0] + wall.width and wall.position[1] <= y <= wall.position[1] + wall.height:
                 return True
         return False  
@@ -77,8 +65,8 @@ class Level_Controller:
     def set_tiles(self, static_surface):
         scanline_texture(static_surface, [(0, 0), (self.sw, 0), (self.sw, self.sh), (0, self.sh) ], self.uvs_default_tiling, self.GROUND)
         
-        if self.WALLS:
-            self.set_tile(self.WALLS, static_surface)
+        if self.level.walls:
+            self.set_tile(self.level.walls, static_surface)
         if self.GROUND_DETAILS:
             self.set_tile(self.GROUND_DETAILS, static_surface)
 
