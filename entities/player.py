@@ -14,8 +14,8 @@ class Player:
         self.walking = False
         self.walking_sprite = 0
         self.tick_loading = 0
-        self.student_card = False
-        self.computer = False
+        self.student_card = 0
+        self.computer = 0
 
     def get_vertices(self):
         x, y = self.pos

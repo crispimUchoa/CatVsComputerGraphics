@@ -1,12 +1,7 @@
 import math
 import pygame
-from entities.player import Player
-from entities.skip_level import Skip_Level
-from primitives.fill_functions import scanline_fill_gradient
-from primitives.functions import scanline_texture, scanline_fill, draw_polygon
 from entities.level_controller import Level_Controller
-from primitives.transform_functions import create_transform, multiply_matrix, rotation, scale, transform, translation
-
+from entities.player import Player
 
 #
 # MAPEAMENTO DAS TECLAS
@@ -32,6 +27,9 @@ pygame.display.set_caption(DISPLAY_CAPTION)
 clock = pygame.time.Clock()
 running = True
 
+font = pygame.font.SysFont(None, 36)
+
+text_surface = font.render('Hello world!', False, (255, 0, 0))
 
 
 
@@ -87,6 +85,8 @@ while running:
     angle +=0.02
     time += 0.05
     s = 1 + 0.15 * math.sin(angle)
+    s_item = 1.10 + 0.05*math.sin(angle)
+    var_tx = (-1 - math.sin(angle))*8
     
     y+=1
     if y>=height*1.5:
@@ -116,12 +116,13 @@ while running:
 
 
 
+    level_home.items[0].draw_sprite(virtual_screen, s_item, var_tx)
     player.show(virtual_screen, uvs_default)
     level.show_timer_bar()
-
     scaled = pygame.transform.scale(virtual_screen, (width*2, height*2))
     scaled_bus = pygame.transform.scale(bus_surface, (width*2, height*2))
     screen.blit(scaled, (0, 0))
+    
     if level.level == level_street:
         screen.blit(scaled_bus, (0, 0))
 
