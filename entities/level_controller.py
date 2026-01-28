@@ -5,6 +5,7 @@ from tile import Tile
 
 class Level_Controller:
     def __init__(self, surface, static_surface):
+        self.GROUND = 0
         self.level = None
         self.static_surface = static_surface
         self.surface = surface
@@ -12,7 +13,7 @@ class Level_Controller:
         self.sw = self.surface.get_width()
         self.sh = self.surface.get_height()
         self.timer = 0
-        self.total_time = 60*60*5 #5 horas do jogo -> 5 minutos da vida real
+        self.total_time = 60*60*3 #3 horas do jogo -> 3 minutos da vida real
         default_repeat_x = self.sw / self.w
         default_repeat_y = self.sh / self.w
         self.uvs_default_tiling = [
@@ -24,24 +25,26 @@ class Level_Controller:
         
 
     def set_level(self, level: Level, player):
+        self.level = level
         self.skip_level = level.skip
         self.player_pos = level.player_pos
 
         self.WALLS: list[Tile] = []
         self.GROUND_DETAILS: list[Tile] = []
-        self.GROUND = level.tile_code[0]
-        for i in range(20):
-            for j in range(25):
-                iw = i*self.w
-                jw = j*self.w
-                if 0 < level.tile_map[i][j] <=2 :
-                    self.WALLS.append(Tile((jw, iw), self.w, self.w, sprite=level.tile_code[level.tile_map[i][j]]))
-                elif level.tile_map[i][j] > 2:
-                    self.GROUND_DETAILS.append(Tile((jw, iw), self.w, self.w, sprite=level.tile_code[level.tile_map[i][j]]))
+        if level.tile_map:
+            self.GROUND = level.tile_code[0]
+            for i in range(20):
+                for j in range(25):
+                    iw = i*self.w
+                    jw = j*self.w
+                    if 0 < level.tile_map[i][j] <=2 :
+                        self.WALLS.append(Tile((jw, iw), self.w, self.w, sprite=level.tile_code[level.tile_map[i][j]]))
+                    elif level.tile_map[i][j] > 2:
+                        self.GROUND_DETAILS.append(Tile((jw, iw), self.w, self.w, sprite=level.tile_code[level.tile_map[i][j]]))
+        
+            self.set_tiles(self.static_surface)
 
         player.pos = level.player_pos
-        self.set_tiles(self.static_surface)
-        x, y = self.skip_level.pos
 
     def iswall(self, x, y):
         for wall in self.WALLS:
@@ -82,3 +85,11 @@ class Level_Controller:
     def isskip(self, player, next_level):
         if self.skip_level.check_player_colision(player.pos):
             self.set_level(next_level, player)
+
+    def show_timer_bar(self):
+        padding = 10
+        bar_y = 8
+        bar_total_x = 96
+        bar_percent = (self.total_time - self.timer) / self.total_time
+        bar_current_x = bar_total_x * bar_percent
+        scanline_fill(self.surface,  [(padding, padding), (padding, padding + bar_y), (padding + bar_current_x, padding + bar_y), (padding + bar_current_x, padding)], (0, 255, 0))

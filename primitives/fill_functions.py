@@ -145,3 +145,67 @@ def scanline_texture(surface: Surface, vertices, uvs, texture):
                     if color.a == 0:
                         continue
                     set_pixel(surface, (x, y), color)
+
+
+def interpola_cor(c1, c2, t):
+    r = int(c1[0] + (c2[0]-c1[0])*t)
+    g = int(c1[1] + (c2[1]-c1[1])*t)
+    b = int(c1[2] + (c2[2]-c1[2])*t)
+
+    r = max(0, min(r, 255))
+    g = max(0, min(g, 255))
+    b = max(0, min(b, 255))
+    
+    return (r, g, b)
+    
+
+# =========================
+# Scanline Fill
+# =========================
+def scanline_fill_gradient(surface, vertices, colors):
+    ys = [p[1] for p in vertices]
+    y_min = int(min(ys))
+    y_max = int(max(ys))
+
+    n = len(vertices)
+
+    for y in range(y_min, y_max):
+        intersecoes = []
+
+        for i in range(n):
+            x0, y0 = vertices[i]
+            x1, y1 = vertices[(i + 1) % n]
+
+            c0 = colors[i]
+            c1 = colors[(i + 1) % n]
+
+            if y0 == y1:
+                continue
+
+            if y0 > y1:
+                x0, y0, x1, y1 = x1, y1, x0, y0
+                c0, c1 = c1, c0
+
+            if y < y0 or y >= y1:
+                continue
+
+            t = (y - y0) / (y1 - y0)
+            x = x0 + t * (x1 - x0)
+            cor_y = interpola_cor(c0, c1, t)
+
+            intersecoes.append((x, cor_y))
+
+        intersecoes.sort(key=lambda i: i[0])
+
+        for i in range(0, len(intersecoes), 2):
+            if i + 1 < len(intersecoes):
+                x_ini, cor_ini = intersecoes[i]
+                x_fim, cor_fim = intersecoes[i + 1]
+
+                if x_fim == x_ini:
+                    continue
+
+                for x in range(int(x_ini), int(x_fim) + 1):
+                    t = (x - x_ini) / (x_fim - x_ini)
+                    cor = interpola_cor(cor_ini, cor_fim, t)
+                    set_pixel(surface, (x, y), cor)

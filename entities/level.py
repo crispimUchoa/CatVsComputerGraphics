@@ -3,8 +3,13 @@ from tile import Tile
 
 
 class Level:
-    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: Skip_Level | int):
+    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: Skip_Level | None, details = None, name=''):
         self.tile_map = tile_map
         self.tile_code = tile_code
         self.player_pos = player_pos
         self.skip = skip
+        self.details = details
+        self.name = name
+
+    def draw_details(self):
+        self.details()
