@@ -73,30 +73,6 @@ level.set_level(level_street, player)
 coliding = False
 walls = level.level.walls
 
-def draw_details(surface):
-    width = 400
-    height = 320
-    c1 = (127, 0, 127)
-    c2 = (196, 32, 127)
-    scanline_fill_gradient(surface, 
-                        [
-                            (0, 0), (width, 0), (width, height/2),(width, height), (0, height), (0, height/2)
-                        ],
-                        [
-                            c1, c1, c2, c1, c1, c2,
-                        ]
-
-                        )
-
-draw_details(gradient_surface)
-
-professor_head_out_1 = [(width/2 - 32, 16), (width/2 + 32, 16), (width/2 + 32, 51), (width/2 - 32, 51) ]
-professor_head_out_2 = [(width/2 - 31, 17), (width/2 + 31, 17), (width/2 + 31, 50), (width/2 - 31, 50) ]
-professor_head_in = [(width/2 - 30, 18), (width/2 + 30, 18), (width/2 + 30, 50), (width/2 - 30, 50) ]
-professor_body = [(width/2 - 6, 30), (width/2 + 6, 30), (width/2 + 6, 100), (width/2 + 32, 108), (width/2 - 32, 108), (width/2 - 6, 100)]
-
-pcx = sum(p[0] for p in professor_head_out_1) / len(professor_head_out_1)
-pcy = sum(p[1] for p in professor_head_out_1) / len(professor_head_out_1)
 
 i = 1
 y = 0
@@ -107,6 +83,11 @@ time = 0
 offset = 0
 while running:
     clock.tick(60)
+
+    angle +=0.02
+    time += 0.05
+    s = 1 + 0.15 * math.sin(angle)
+    
     y+=1
     if y>=height*1.5:
         y=-height*1.5
@@ -130,24 +111,9 @@ while running:
         offset = (offset - 4) % height
         virtual_screen.blit(gradient_surface, (0, offset - height))
         virtual_screen.blit(gradient_surface, (0, offset))
+        level.level.draw_dynamic_details(virtual_screen, angle, s) 
     
-    angle +=0.02
-    time += 0.05
-    s = 1 + 0.15 * math.sin(angle)
 
-    m = create_transform()
-    m = multiply_matrix(translation(-pcx, -pcy), m)
-    m = multiply_matrix(rotation(math.sin(angle)/4), m)
-    m = multiply_matrix(scale(s, s), m)
-    m = multiply_matrix(translation(pcx, pcy), m)
-    pho1 = transform(m, professor_head_out_1)
-    # pho2 = transform(m, professor_head_out_2)
-    phin = transform(m, professor_head_in)
-
-    # scanline_fill(virtual_screen, professor_body, (32, 32, 32))
-    # scanline_fill(virtual_screen, pho1, (32, 32, 32))
-    # draw_polygon(virtual_screen, pho2, (32, 32, 32))
-    # scanline_fill(virtual_screen, phin, 'black')
 
 
     player.show(virtual_screen, uvs_default)
@@ -157,7 +123,7 @@ while running:
     scaled_bus = pygame.transform.scale(bus_surface, (width*2, height*2))
     screen.blit(scaled, (0, 0))
     if level.level == level_street:
-        screen.blit(scaled_bus, (0, 0)) 
+        screen.blit(scaled_bus, (0, 0))
 
     pygame.display.flip()
 

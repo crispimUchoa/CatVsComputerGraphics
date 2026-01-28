@@ -4,7 +4,7 @@ from tile import Tile
 
 
 class Level:
-    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, name='', w=16):
+    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, dynamic_details= None, name='', w=16):
         self.tile_map = tile_map
         self.tile_code = tile_code
         self.player_pos = player_pos
@@ -15,6 +15,7 @@ class Level:
         self.ground_details: list[Tile] = []
         self.ground = self.tile_code[0] if tile_map else None
         self.w = w
+        self.dynamic_details = dynamic_details
 
         if self.tile_map:
             for i in range(20):
@@ -56,6 +57,9 @@ class Level:
 
     def draw_details(self, static_surface):
         self.details(static_surface)
+
+    def draw_dynamic_details(self, surface, angle, s):
+        self.dynamic_details(surface, angle, s)
 
     def draw_level(self, surfaces, uvs):
         _, static_surface, _, _ = surfaces
