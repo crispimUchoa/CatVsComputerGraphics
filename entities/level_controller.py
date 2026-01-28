@@ -43,7 +43,8 @@ class Level_Controller:
     
     def isobstacle(self, x, y):
         for obstacle in self.level.obstacles:
-            if obstacle[0] <= x <= obstacle[2] and obstacle[1] <= y <= obstacle.position[3]:
+            xmin, ymin, xmax, ymax = obstacle
+            if xmin <= x <= xmax and ymin <= y <= ymax:
                 return True
         return False  
 

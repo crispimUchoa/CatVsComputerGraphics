@@ -16,7 +16,7 @@ class Level:
         self.ground = self.tile_code[0] if tile_map else None
         self.w = w
         self.dynamic_details = dynamic_details
-        self.obstacles = []
+        self.obstacles = obstacles
 
         if self.tile_map:
             for i in range(20):

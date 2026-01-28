@@ -53,7 +53,7 @@ def street_details(surfaces):
     h = static_surface.get_height()
     bw = 344
     bh = 120
-    bot_size = 0.1
+    bot_size = 0.15
     uvs_bus_bottom = [
         (0, 1),
         (1, 1),
@@ -90,7 +90,6 @@ level_street = Level(tile_map, tile_code, (32, 298), [Skip_Level( (1*16, 304), 0
                      name='street', 
                      details=street_details,
                      obstacles=[
-                         [
-                             ()
-                         ]
+                         (400 - 332, 320 - 8*16, 400, 320 - 8*16 + 4)
+                         
                      ])
