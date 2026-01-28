@@ -41,6 +41,15 @@ class Level_Controller:
                 return True
         return False  
     
+    def isobstacle(self, x, y):
+        for obstacle in self.level.obstacles:
+            if obstacle[0] <= x <= obstacle[2] and obstacle[1] <= y <= obstacle.position[3]:
+                return True
+        return False  
+
+    def iscolisor(self, x, y):
+        return self.iswall(x, y) or self.isobstacle(x, y)
+
     def increse_timer(self):
         self.timer+=1
     

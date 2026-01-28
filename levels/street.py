@@ -86,4 +86,11 @@ def street_details(surfaces):
     scanline_texture(bus_surface, bus_vertices_top, uvs_bus_top, BUS_SPRITE)
 
 
-level_street = Level(tile_map, tile_code, (32, 298), [Skip_Level( (1*16, 304), 0), Skip_Level( (328, 176), 2, h=48)], name='street', details=street_details)
+level_street = Level(tile_map, tile_code, (32, 298), [Skip_Level( (1*16, 304), 0), Skip_Level( (328, 176), 2, h=48)], 
+                     name='street', 
+                     details=street_details,
+                     obstacles=[
+                         [
+                             ()
+                         ]
+                     ])
