@@ -1,10 +1,13 @@
 from entities.level import Level
+from entities.player import Player
 from entities.skip_level import Skip_Level
 from primitives.fill_functions import scanline_fill, scanline_texture
 from tile import Tile
 
 class Level_Controller:
     def __init__(self, surface, static_surface, gradient_surface, bus_surface):
+        self.end = False
+        self.win = False
         self.pause = False
         self.bus_surface = bus_surface
         self.gradient_surface = gradient_surface
@@ -16,7 +19,7 @@ class Level_Controller:
         self.sw = self.surface.get_width()
         self.sh = self.surface.get_height()
         self.timer = 0
-        self.total_time = 60*3 #3 horas do jogo -> 3 minutos da vida real
+        self.total_time = 60*60 #3 horas do jogo -> 3 minutos da vida real
         default_repeat_x = self.sw / self.w
         default_repeat_y = self.sh / self.w
         self.uvs_default_tiling = [
@@ -65,6 +68,10 @@ class Level_Controller:
     def isskip(self, player):
         for skip in self.level.skip:
             if skip.check_player_colision(player.pos):
+                if skip.next_level.name == 'classroom':
+                    if player.items['student_card'] < 2:
+
+                        return
                 self.set_level(skip.next_level, player)
 
     def draw_items(self, surface, s, var_tx):
@@ -83,3 +90,39 @@ class Level_Controller:
         bar_percent = (self.total_time - self.timer) / self.total_time
         bar_current_x = bar_total_x * bar_percent
         scanline_fill(self.surface,  [(padding, padding), (padding, padding + bar_y), (padding + bar_current_x, padding + bar_y), (padding + bar_current_x, padding)], (0, 255, 0))
+
+    def after_tick_status(self, player):
+        if self.timer >= self.total_time:
+            self.end = True
+
+        if self.end:
+            print('Ganhou' if self.win else 'Perdeu')
+
+    def is_player_coliding(self, dir, player: Player):
+        x, y = player.pos
+        if dir == 'LEFT':
+            return ( x-player.sx/2 <= 0) or self.iscolisor(x - player.sx/2, y) or self.iscolisor(x - player.sx/2, y + player.sy/4)
+        if dir == 'RIGHT':
+            return ( x+player.sx/2 > self.sw) or self.iscolisor(x + player.sx/2, y) or self.iscolisor(x + player.sx/2, y + player.sy/4)
+        if dir == 'UP':
+            return ( y-player.sx/4 <= 0) or self.iscolisor(x - player.sx/4 , y - player.sy/4) or self.iscolisor(x + player.sx/4, y - player.sy/4)
+        if dir == 'DOWN':
+            return ( y+player.sx/2 > self.sh) or self.iscolisor(x - player.sx/4, y + player.sy/2) or self.iscolisor(x + player.sx/4, y + player.sy/2)
+        return False
+    
+    def player_in_items_range(self, player: Player):
+        for item in self.level.items:
+            if player.can_get_item(item):
+                player.get_item(item)
+
+    def is_player_meeting_professor(self, player):
+        for action in self.level.actions:
+            xmin, ymin, xmax, ymax = action
+            x, y = player.pos
+
+            if xmin - 4 <= x <= xmax + 4 and ymin - 4 <= y <= ymax + 4:
+                self.end = True
+                if self.level.name == 'classroom':
+                    if player.items['laptop'] == 1 and player.items['student_card'] == 2:
+                        self.win = True
+            

@@ -1,11 +1,12 @@
 from entities.item import Item
+from entities.player import Player
 from entities.skip_level import Skip_Level
 from primitives.fill_functions import scanline_texture
 from tile import Tile
 
 
 class Level:
-    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, dynamic_details= None, name='', w=16, obstacles = [], items: list[Item] = []):
+    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, dynamic_details= None, name='', w=16, obstacles = [], items: list[Item] = [], actions = []):
         self.tile_map = tile_map
         self.tile_code = tile_code
         self.player_pos = player_pos
@@ -19,6 +20,7 @@ class Level:
         self.dynamic_details = dynamic_details
         self.obstacles = obstacles
         self.items = items
+        self.actions = actions
 
         if self.tile_map:
             for i in range(20):
@@ -71,5 +73,7 @@ class Level:
             self.draw_tiles(static_surface, uvs)
         if self.details:
             self.draw_details(surfaces)
+
+        
 
     

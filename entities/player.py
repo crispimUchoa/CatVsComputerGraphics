@@ -2,7 +2,6 @@ import random
 from pygame.image import load
 
 from entities.item import Item
-from entities.level_controller import Level_Controller
 from primitives.fill_functions import scanline_texture
 
 class Player:
@@ -11,7 +10,7 @@ class Player:
         self.sprites = self.load_convert_sprites()
         self.sx = 32
         self.sy = 32
-        self.speed = 2
+        self.speed = 2 
         self.dir = dir
         self.walking = False
         self.walking_sprite = 0
@@ -75,17 +74,6 @@ class Player:
         self.set_dir(dir)
         self.walk(dir)
 
-    def is_coliding(self, dir, controller: Level_Controller):
-        x, y = self.pos
-        if dir == 'LEFT':
-            return ( x-self.sx/2 <= 0) or controller.iscolisor(x - self.sx/2, y) or controller.iscolisor(x - self.sx/2, y + self.sy/4)
-        if dir == 'RIGHT':
-            return ( x+self.sx/2 > controller.sw) or controller.iscolisor(x + self.sx/2, y) or controller.iscolisor(x + self.sx/2, y + self.sy/4)
-        if dir == 'UP':
-            return ( y-self.sx/4 <= 0) or controller.iscolisor(x - self.sx/4 , y - self.sy/4) or controller.iscolisor(x + self.sx/4, y - self.sy/4)
-        if dir == 'DOWN':
-            return ( y+self.sx/2 > controller.sh) or controller.iscolisor(x - self.sx/4, y + self.sy/2) or controller.iscolisor(x + self.sx/4, y + self.sy/2)
-        return False
 
     def can_get_item(self, item: Item):
         x, y = self.pos
@@ -102,16 +90,8 @@ class Player:
         item.is_in_inventory = True
         self.items[item.name] +=1
         print('pegou', item.name)
-        print(self.items)
-
-    def in_items_range(self, controller: Level_Controller):
-        for item in controller.level.items:
-            if self.can_get_item(item):
-                self.get_item(item)
-            
+        print(self.items)     
         
-
-
 
     def get_texture(self):
         if self.walking:

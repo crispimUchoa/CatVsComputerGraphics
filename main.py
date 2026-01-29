@@ -102,7 +102,8 @@ while running:
         if event.type == pygame.KEYDOWN :
             if event.key == pygame.K_RETURN and not level.pause:
                 level.isskip(player)
-                player.in_items_range(level)
+                level.player_in_items_range(player)
+                level.is_player_meeting_professor(player)
 
             if event.key == pygame.K_ESCAPE:
                 level.pause = not level.pause
@@ -110,7 +111,7 @@ while running:
     keys = pygame.key.get_pressed()
     for key, dir in key_map.items():
         
-        if keys[key] and not player.is_coliding(dir, level) and not level.pause:
+        if keys[key] and not level.is_player_coliding(dir, player) and not level.pause:
             player.move(dir)
 
     virtual_screen.blit(static_surface, (0, 0))
@@ -137,6 +138,7 @@ while running:
     pygame.display.flip()
 
     if not level.pause:
+        level.after_tick_status(player)
         player.status_after_tick()
         level.increase_timer()
 

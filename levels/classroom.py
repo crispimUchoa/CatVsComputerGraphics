@@ -50,4 +50,9 @@ def dynamic(surface, angle, s):
 
 
 
-level_classroom = Level([], dict(), (12*16, 32), [], details=draw_details, dynamic_details=dynamic, name='classroom')
+level_classroom = Level([], dict(), (200, 300), [], details=draw_details, dynamic_details=dynamic, name='classroom',
+                        obstacles=[(0, 0, 400, 64)],
+                        actions=[
+                            (200 - 32, 16, 200+32, 108,),
+                        ]
+                        )
