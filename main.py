@@ -36,7 +36,7 @@ running = True
 pygame.init()
 pygame.mixer.init()
 
-pygame.mixer.music.load("sounds/song.mpeg")
+pygame.mixer.music.load("sounds/song.ogg")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.2)
 
