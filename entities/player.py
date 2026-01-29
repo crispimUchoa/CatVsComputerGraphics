@@ -10,7 +10,7 @@ class Player:
         self.sprites = self.load_convert_sprites()
         self.sx = 64
         self.sy = 64
-        self.speed = 15
+        self.speed = 5
         self.dir = dir
         self.walking = False
         self.walking_sprite = 0
@@ -19,7 +19,7 @@ class Player:
             'student_card': 0,
             'laptop': 0
         }
-        self.vision_range = 250
+        self.vision_range = 150
 
     def get_vertices(self):
         x, y = self.pos
@@ -91,7 +91,8 @@ class Player:
         item.is_in_inventory = True
         self.items[item.name] +=1
         print('pegou', item.name)
-        print(self.items)     
+        print(self.items)
+        item.got = True     
         
 
     def get_texture(self):

@@ -3,7 +3,7 @@ from primitives.transform_functions import create_transform, multiply_matrix, sc
 
 
 class Item:
-    def __init__(self, position, name, w, h, texture):
+    def __init__(self, position, name, w, h, texture, got=False):
         self.position = position
         self.name = name
         self.w = w
@@ -24,6 +24,7 @@ class Item:
             (x, y+ self.h),
 
         ]
+        self.got = got
 
 
     def draw_sprite(self, surface, s, var_ty):
@@ -39,8 +40,8 @@ class Item:
         m = multiply_matrix(translation(cx, cy), m)
         m = multiply_matrix(translation(0, var_ty), m)
         item_sprite = transform(m, self.vertices)
-
-        scanline_texture(surface, item_sprite, self.uv, self.texture)
+        return item_sprite
+        # scanline_texture(surface, item_sprite, self.uv, self.texture)
 
     def can_get(self, x, y):
         if self.is_in_inventory:

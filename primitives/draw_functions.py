@@ -6,10 +6,11 @@ coord_type = tuple[int, int]
 def set_pixel(surface: Surface, xy: coord_type, color: color_type):
     x, y = xy
     if 0 <= 0 < surface.get_width() and 0 <= y < surface.get_height():
-        surface.set_at((x,y), color)
+        surface.set_at((int(x),int(y)), color)
 
 def read_pixel(surface: Surface, xy: coord_type):
-    return surface.get_at(xy)
+    x, y = xy
+    return surface.get_at((int(x), int(y)))
 
 def draw_dda_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
     x0, y0 = xy0

@@ -2,6 +2,7 @@ from entities.level import Level
 from entities.player import Player
 from entities.skip_level import Skip_Level
 from primitives.fill_functions import scanline_fill, scanline_texture
+from primitives.viewport_clipping_functions import cohen_sutherland
 from tile import Tile
 import asyncio
 
@@ -85,12 +86,41 @@ class Level_Controller:
                         return
                 self.set_level(skip.next_level, player)
 
-    def draw_items(self, surface, s, var_tx, player):
+    # def draw_items(self, surface, s, var_tx, player):
+    #     px, py = player.pos
+    #     for item in self.level.items:
+    #         ix, iy = item.position
+    #         if px - player.vision_range <= ix <= px + player.vision_range and py - player.vision_range/2 <= iy <= py + player.vision_range/2:
+    #             item.draw_sprite(surface, s, var_tx)
+
+    def draw_items(self, surface,s, var_tx, player, uvs):
+
         px, py = player.pos
+        vr = player.vision_range
+        xmin = px - vr
+        ymin = py - vr
+        xmax = px + vr
+        ymax = py + vr
         for item in self.level.items:
-            ix, iy = item.position
-            if px - player.vision_range <= ix <= px + player.vision_range and py - player.vision_range/2 <= iy <= py + player.vision_range/2:
-                item.draw_sprite(surface, s, var_tx)
+            if item.draw_sprite(surface, s, var_tx) is None:
+                continue
+            item_vertices = item.draw_sprite(surface, s, var_tx)
+            x0, y0 = item_vertices[0]
+            x2, y2 = item_vertices[2]
+            visible, rx0, ry0, rx1, ry1 = cohen_sutherland(x0, y0, x2, y2, xmin, ymin, xmax, ymax)
+            if visible:
+                u0 = (rx0 - x0) / (x2 - x0)
+                v0 = (ry0 - y0) / (y2 - y0)
+                u1 = (rx1 - x0) / (x2 - x0)
+                v1 = (ry1 - y0) / (y2 - y0)
+
+                uvs_visible = [
+                    (u0, v0),
+                    (u1, v0),
+                    (u1, v1),
+                    (u0, v1),
+]
+                scanline_texture(surface, [(rx0, ry0), (rx1, ry0), (rx1, ry1), (rx0, ry1), ], uvs_visible, item.texture)
 
     def toggle_pause(self):
         if not self.end:

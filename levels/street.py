@@ -97,6 +97,6 @@ level_street = Level(tile_map, tile_code, (32*2, 298*2), [Skip_Level( (1*32, 304
                          
                      ],
                      items= [
-                       Item((32*25-4*32, 32*2*2), 'student_card', 48, 30, CAT_CARD_2_SPRITE)
+                       Item((32*25-4*32, 32*3*2), 'student_card', 48, 30, CAT_CARD_2_SPRITE)
                    ]
                      )
