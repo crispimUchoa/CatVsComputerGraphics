@@ -5,6 +5,7 @@ from tile import Tile
 
 class Level_Controller:
     def __init__(self, surface, static_surface, gradient_surface, bus_surface):
+        self.pause = False
         self.bus_surface = bus_surface
         self.gradient_surface = gradient_surface
         self.GROUND = 0
@@ -15,7 +16,7 @@ class Level_Controller:
         self.sw = self.surface.get_width()
         self.sh = self.surface.get_height()
         self.timer = 0
-        self.total_time = 60*60*3 #3 horas do jogo -> 3 minutos da vida real
+        self.total_time = 60*3 #3 horas do jogo -> 3 minutos da vida real
         default_repeat_x = self.sw / self.w
         default_repeat_y = self.sh / self.w
         self.uvs_default_tiling = [
@@ -51,8 +52,9 @@ class Level_Controller:
     def iscolisor(self, x, y):
         return self.iswall(x, y) or self.isobstacle(x, y)
 
-    def increse_timer(self):
-        self.timer+=1
+    def increase_timer(self):
+        if self.timer < self.total_time:
+            self.timer+=1
     
     def get_timer_in_hm(self):
         timer = self.timer// 60
@@ -64,6 +66,15 @@ class Level_Controller:
         for skip in self.level.skip:
             if skip.check_player_colision(player.pos):
                 self.set_level(skip.next_level, player)
+
+    def draw_items(self, surface, s, var_tx):
+        for item in self.level.items:
+            item.draw_sprite(surface, s, var_tx)
+
+    def set_pause(self, ):
+        if self.pause:
+            ...
+        self.pause = not self.pause
 
     def show_timer_bar(self):
         padding = 10

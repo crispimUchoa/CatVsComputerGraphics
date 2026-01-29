@@ -1,5 +1,7 @@
+import random
 from pygame.image import load
 
+from entities.item import Item
 from entities.level_controller import Level_Controller
 from primitives.fill_functions import scanline_texture
 
@@ -14,8 +16,10 @@ class Player:
         self.walking = False
         self.walking_sprite = 0
         self.tick_loading = 0
-        self.student_card = 0
-        self.computer = 0
+        self.items = {
+            'student_card': 0,
+            'laptop': 0
+        }
 
     def get_vertices(self):
         x, y = self.pos
@@ -82,6 +86,32 @@ class Player:
         if dir == 'DOWN':
             return ( y+self.sx/2 > controller.sh) or controller.iscolisor(x - self.sx/4, y + self.sy/2) or controller.iscolisor(x + self.sx/4, y + self.sy/2)
         return False
+
+    def can_get_item(self, item: Item):
+        x, y = self.pos
+        return item.can_get(x - self.sx/2, y - self.sy/2) or \
+                item.can_get(x + self.sx/2, y- self.sy/2) or \
+                item.can_get(x - self.sx/2, y + self.sy/2) or \
+                item.can_get(x + self.sx/2, y + self.sy/2) or \
+                item.can_get(x, y - self.sy/2) or \
+                item.can_get(x, y + self.sy/2) or \
+                item.can_get(x - self.sx/2, y) or \
+                item.can_get(x + self.sx/2, y)
+    
+    def get_item(self, item: Item):
+        item.is_in_inventory = True
+        self.items[item.name] +=1
+        print('pegou', item.name)
+        print(self.items)
+
+    def in_items_range(self, controller: Level_Controller):
+        for item in controller.level.items:
+            if self.can_get_item(item):
+                self.get_item(item)
+            
+        
+
+
 
     def get_texture(self):
         if self.walking:

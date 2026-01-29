@@ -63,7 +63,7 @@ bus_surface = pygame.Surface((width, height), pygame.SRCALPHA)
 
 level = Level_Controller(virtual_screen, static_surface, gradient_surface, bus_surface)
 player = Player((0, 0))
-level.set_level(level_street, player)
+level.set_level(level_home, player)
 # scanline_texture(static_surface, [ (width - 22*16, height - 15*16),(width, height - 15*16),(width, height - 7*16),(width - 22*16, height - 7*16) ], uvs_default, BUS_SPRITE)
 #
 #JOGO RODANDO
@@ -78,15 +78,19 @@ y = 0
 angle = 0
 time = 0
 
+s = 1
+s_item = 1.1
+var_tx = -8
 offset = 0
 while running:
     clock.tick(60)
 
-    angle +=0.02
-    time += 0.05
-    s = 1 + 0.15 * math.sin(angle)
-    s_item = 1.10 + 0.05*math.sin(angle)
-    var_tx = (-1 - math.sin(angle))*8
+    if not level.pause:
+        angle +=0.02
+        time += 0.05
+        s = 1 + 0.15 * math.sin(angle)
+        s_item = 1.10 + 0.05*math.sin(angle)
+        var_tx = (-1 - math.sin(angle))*8
     
     y+=1
     if y>=height*1.5:
@@ -95,14 +99,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
+        if event.type == pygame.KEYDOWN :
+            if event.key == pygame.K_RETURN and not level.pause:
                 level.isskip(player)
+                player.in_items_range(level)
+
+            if event.key == pygame.K_ESCAPE:
+                level.pause = not level.pause
 
     keys = pygame.key.get_pressed()
     for key, dir in key_map.items():
         
-        if keys[key] and not player.is_coliding(dir, level):
+        if keys[key] and not player.is_coliding(dir, level) and not level.pause:
             player.move(dir)
 
     virtual_screen.blit(static_surface, (0, 0))
@@ -116,7 +124,7 @@ while running:
 
 
 
-    level_home.items[0].draw_sprite(virtual_screen, s_item, var_tx)
+    level.draw_items(virtual_screen, s_item, var_tx)
     player.show(virtual_screen, uvs_default)
     level.show_timer_bar()
     scaled = pygame.transform.scale(virtual_screen, (width*2, height*2))
@@ -128,7 +136,8 @@ while running:
 
     pygame.display.flip()
 
-    player.status_after_tick()
-    level.increse_timer()
+    if not level.pause:
+        player.status_after_tick()
+        level.increase_timer()
 
 pygame.quit()

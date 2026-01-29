@@ -9,8 +9,17 @@ class Item:
         self.w = w
         self.h = h
         self.texture = texture
+        self.is_in_inventory = False
+        self.uv = [
+            (0, 0),
+            (1, 0),
+            (1, 1),
+            (0, 1)
+        ]
 
     def draw_sprite(self, surface, s, var_ty):
+        if self.is_in_inventory:
+            return
         x, y = self.position
         vertices = [
             (x, y),
@@ -18,12 +27,6 @@ class Item:
             (x + self.w, y + self.h),
             (x, y+ self.h),
 
-        ]
-        uv = [
-            (0, 0),
-            (1, 0),
-            (1, 1),
-            (0, 1)
         ]
 
         cx = sum([p[0] for p in vertices ])/ len(vertices)
@@ -36,8 +39,10 @@ class Item:
         m = multiply_matrix(translation(0, var_ty), m)
         item_sprite = transform(m, vertices)
 
-        scanline_texture(surface, item_sprite, uv, self.texture)
+        scanline_texture(surface, item_sprite, self.uv, self.texture)
 
     def can_get(self, x, y):
+        if self.is_in_inventory:
+            return False
         px, py = self.position
-        return (px <= x <= px + self.w) and (py <= y <= py + self.h)
+        return (px-4 <= x <= px +4 + self.w) and (py - 4<= y <= py +4 +self.h)

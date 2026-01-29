@@ -1,3 +1,4 @@
+from entities.item import Item
 from entities.level import Level
 from pygame.image import load
 from entities.skip_level import Skip_Level
@@ -11,6 +12,8 @@ GRASS_SPRITE = load('./sprites/tiles/GRASS.jpeg').convert()
 PAVEMENT_SPRITE = load('./sprites/tiles/PAVEMENT.jpeg').convert()
 
 BUS_SPRITE = load('./sprites/BUS.png').convert_alpha()
+
+CAT_CARD_2_SPRITE = load('./sprites/CAT_CARD_2.png').convert_alpha()
 
 
 
@@ -92,4 +95,8 @@ level_street = Level(tile_map, tile_code, (32, 298), [Skip_Level( (1*16, 304), 0
                      obstacles=[
                          (400 - 332, 320 - 8*16, 400, 320 - 8*16 + 4)
                          
-                     ])
+                     ],
+                     items= [
+                       Item((400-64, 64), 'student_card', 24, 15, CAT_CARD_2_SPRITE)
+                   ]
+                     )

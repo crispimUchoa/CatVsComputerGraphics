@@ -11,6 +11,7 @@ HOUSE_WALL_FRONT_SPRITE = load('./sprites/tiles/HOUSE_WALL_FRONT.jpeg').convert(
 HOUSE_GROUND_SPRITE = load('./sprites/tiles/HOUSE_GROUND.png').convert()
 
 CAT_CARD_1_SPRITE = load('./sprites/CAT_CARD_1.png').convert_alpha()
+LAPTOP_SPRITE = load('./sprites/LAPTOP.png').convert_alpha()
 
 
 
@@ -46,6 +47,7 @@ tile_code = {
 
 level_home = Level(tile_map, tile_code, (12*16, 32), [Skip_Level((11*16, 0), 1)], name='home', 
                    items= [
-                       Item((50, 300), 'laptop', 24, 15, CAT_CARD_1_SPRITE)
+                       Item((48, 15*16), 'student_card', 24, 15, CAT_CARD_1_SPRITE),
+                       Item((400-48, 15*16), 'laptop', 24, 24, LAPTOP_SPRITE)
                    ]
                    )
