@@ -9,16 +9,16 @@ from primitives.transform_functions import create_transform, multiply_matrix, ro
 
 def star_vertices(x, y):
     return [
-        (x,     y - 8),   # topo
-        (x + 2, y - 3),
-        (x + 8, y - 3),
-        (x + 3, y + 1),
-        (x + 5, y + 8),
-        (x,     y + 4),
-        (x - 5, y + 8),
-        (x - 3, y + 1),
-        (x - 8, y - 3),
-        (x - 2, y - 3),
+        (x,     y - 16),   # topo
+        (x + 4, y - 6),
+        (x + 16, y - 6),
+        (x + 6, y + 2),
+        (x + 10, y + 16),
+        (x,     y + 8),
+        (x - 15, y + 16),
+        (x - 6, y + 2),
+        (x - 16, y - 6),
+        (x - 4, y - 6),
     ]
 
 def draw_details(surfaces):
@@ -27,14 +27,14 @@ def draw_details(surfaces):
     static_surface.fill((0, 0, 0, 0))
 
     scanline_fill(static_surface, [
-            (10, 10), (106, 10), (106, 18), (10, 18)
+            (10*2, 10*2), (106*2, 10*2), (106*2, 18*2), (10*2, 18*2)
         ], (0, 0, 0))
 
     scanline_fill(static_surface, [
-            (112, 10), (139, 10), (139, 18), (112, 18)
+            (112*2, 10*2), (139*2, 10*2), (139*2, 18*2), (112*2, 18*2)
         ], (0, 0, 0))
-    width = 400
-    height = 320
+    width = 400*2
+    height = 320*2
     c1 = (127, 0, 127)
     c2 = (196, 32, 127)
     scanline_fill_gradient(gradient_surface, 
@@ -49,10 +49,10 @@ def draw_details(surfaces):
 
 def dynamic(surface, angle, s):
     width = surface.get_width()
-    professor_head_out_1 = [(width/2 - 32, 16), (width/2 + 32, 16), (width/2 + 32, 51), (width/2 - 32, 51) ]
-    professor_head_out_2 = [(width/2 - 31, 17), (width/2 + 31, 17), (width/2 + 31, 50), (width/2 - 31, 50) ]
-    professor_head_in = [(width/2 - 30, 18), (width/2 + 30, 18), (width/2 + 30, 50), (width/2 - 30, 50) ]
-    professor_body = [(width/2 - 6, 30), (width/2 + 6, 30), (width/2 + 6, 100), (width/2 + 32, 108), (width/2 - 32, 108), (width/2 - 6, 100)]
+    professor_head_out_1 = [(width/2 - 32*2, 16*2), (width/2 + 32*2, 16*2), (width/2 + 32*2, 51*2), (width/2 - 32*2, 51*2) ]
+    professor_head_out_2 = [(width/2 - 31*2, 17*2), (width/2 + 31*2, 17*2), (width/2 + 31*2, 50*2), (width/2 - 31*2, 50*2) ]
+    professor_head_in = [(width/2 - 30*2, 18*2), (width/2 + 30*2, 18*2), (width/2 + 30*2, 50*2), (width/2 - 30*2, 50*2) ]
+    professor_body = [(width/2 - 6*2, 30*2), (width/2 + 6*2, 30*2), (width/2 + 6*2, 100*2), (width/2 + 32*2, 108*2), (width/2 - 32*2, 108*2), (width/2 - 6*2, 100*2)]
 
     stars = [
         ( 80,  75),   (160,  75),   (240,  75),   (320,  75),
@@ -74,6 +74,8 @@ def dynamic(surface, angle, s):
     
     for star in stars:
         x, y = star
+        x = 2*x
+        y = 2*y
         star_s = 1.20 + 0.20*math.sin(angle*2)
         ms = create_transform()
         ms = multiply_matrix(translation(-x, -y), ms)
@@ -94,9 +96,9 @@ def dynamic(surface, angle, s):
 
 
 
-level_classroom = Level([], dict(), (200, 300), [], details=draw_details, dynamic_details=dynamic, name='classroom',
-                        obstacles=[(0, 0, 400, 64)],
+level_classroom = Level([], dict(), (200*2, 2*300), [], details=draw_details, dynamic_details=dynamic, name='classroom',
+                        obstacles=[(0, 0, 400*2, 64*2)],
                         actions=[
-                            (200 - 32, 16, 200+32, 108,),
+                            (200*2 - 32*2, 16*2, 200*2+32*2, 108*2,),
                         ]
                         )

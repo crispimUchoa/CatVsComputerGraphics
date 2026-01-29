@@ -54,8 +54,8 @@ def street_details(surfaces):
     _, static_surface, _, bus_surface = surfaces
     w = static_surface.get_width()
     h = static_surface.get_height()
-    bw = 344
-    bh = 120
+    bw = 344*2
+    bh = 120*2
     bot_size = 0.15
     uvs_bus_bottom = [
         (0, 1),
@@ -72,31 +72,31 @@ def street_details(surfaces):
     ]
 
     bus_vertices_bottom = [
-        (w - bw, h - 7*16),
-        (w, h - 7*16),
-        (w, h - 7*16 - bh*(1 - bot_size)),
-        (w - bw, h - 7*16 - bh*(1-bot_size)),
+        (w - bw, h - 7*32),
+        (w, h - 7*32),
+        (w, h - 7*32 - bh*(1 - bot_size)),
+        (w - bw, h - 7*32 - bh*(1-bot_size)),
     ]
 
     bus_vertices_top = [
-        (w - bw, h - 7*16 - bh*bot_size),
-        (w, h - 7*16 - bh*bot_size),
-        (w, h - 7*16 - bh),
-        (w - bw, h - 7*16 - bh),
+        (w - bw, h - 7*32 - bh*bot_size),
+        (w, h - 7*32 - bh*bot_size),
+        (w, h - 7*32 - bh),
+        (w - bw, h - 7*32 - bh),
     ]
 
     scanline_texture(static_surface, bus_vertices_bottom, uvs_bus_bottom, BUS_SPRITE)
     scanline_texture(bus_surface, bus_vertices_top, uvs_bus_top, BUS_SPRITE)
 
 
-level_street = Level(tile_map, tile_code, (32, 298), [Skip_Level( (1*16, 304), 0), Skip_Level( (328, 176), 2, h=48)], 
+level_street = Level(tile_map, tile_code, (32*2, 298*2), [Skip_Level( (1*32, 304*(2)), 0), Skip_Level( (328*2, 176*2), 2, h=48*2)], 
                      name='street', 
                      details=street_details,
                      obstacles=[
-                         (400 - 332, 320 - 8*16, 400, 320 - 8*16 + 4)
+                         (78*2, 320*2 - 8*32, 400*2, 320*2 - 8*32 + 8)
                          
                      ],
                      items= [
-                       Item((400-64, 64), 'student_card', 24, 15, CAT_CARD_2_SPRITE)
+                       Item((32*25-4*32, 32*2*2), 'student_card', 48, 30, CAT_CARD_2_SPRITE)
                    ]
                      )

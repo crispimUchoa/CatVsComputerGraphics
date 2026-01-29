@@ -6,7 +6,7 @@ from tile import Tile
 
 
 class Level:
-    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, dynamic_details= None, name='', w=16, obstacles = [], items: list[Item] = [], actions = []):
+    def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, dynamic_details= None, name='', w=32, obstacles = [], items: list[Item] = [], actions = []):
         self.tile_map = tile_map
         self.tile_code = tile_code
         self.player_pos = player_pos
@@ -75,11 +75,11 @@ class Level:
             self.draw_details(surfaces)
 
         scanline_fill(static_surface, [
-            (10, 10), (106, 10), (106, 18), (10, 18)
+            (10*2, 10*2), (106*2, 10*2), (106*2, 18*2), (10*2, 18*2)
         ], (0, 0, 0))
 
         scanline_fill(static_surface, [
-            (112, 10), (139, 10), (139, 18), (112, 18)
+            (112*2, 10*2), (139*2, 10*2), (139*2, 18*2), (112*2, 18*2)
         ], (0, 0, 0))
         
 

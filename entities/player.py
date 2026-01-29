@@ -8,9 +8,9 @@ class Player:
     def __init__(self, position, dir='DOWN'):
         self.pos = position
         self.sprites = self.load_convert_sprites()
-        self.sx = 32
-        self.sy = 32
-        self.speed = 6
+        self.sx = 64
+        self.sy = 64
+        self.speed = 15
         self.dir = dir
         self.walking = False
         self.walking_sprite = 0
@@ -19,7 +19,7 @@ class Player:
             'student_card': 0,
             'laptop': 0
         }
-        self.vision_range = 125
+        self.vision_range = 250
 
     def get_vertices(self):
         x, y = self.pos

@@ -23,7 +23,7 @@ class Level_Controller:
         self.sw = self.surface.get_width()
         self.sh = self.surface.get_height()
         self.timer = 0
-        self.total_time = 60*60 #3 horas do jogo -> 3 minutos da vida real
+        self.total_time = 60*60 #1 horas do jogo -> 1 minutos da vida real
         default_repeat_x = self.sw / self.w
         default_repeat_y = self.sh / self.w
         self.uvs_default_tiling = [
@@ -71,8 +71,8 @@ class Level_Controller:
     
     def get_timer_in_hm(self):
         timer = self.timer// 60
-        h = (timer // 60) + 5
-        m = timer % 60
+        h = (timer // 60) + 7
+        m = (timer + 30) % 60
         return f'{h:02d}:{m:02d}'
 
 
@@ -97,9 +97,9 @@ class Level_Controller:
             self.pause = not self.pause
 
     def show_timer_bar(self):
-        padding = 10
-        bar_y = 8
-        bar_total_x = 96
+        padding = 10*2
+        bar_y = 8*2
+        bar_total_x = 96*2
         bar_percent = (self.total_time - self.timer) / self.total_time
         bar_current_x = bar_total_x * bar_percent
         scanline_fill(self.surface,  [(padding, padding), (padding, padding + bar_y), (padding + bar_current_x, padding + bar_y), (padding + bar_current_x, padding)], (0, 255, 0))
@@ -124,7 +124,7 @@ class Level_Controller:
             message = 'Parabéns! Aguarde sua nota!' if self.win else 'Você perdeu!'
             if not self.win:
                 message += ' Seu tempo acabou!' if self.timer >= self.total_time else ' Esqueceu notebook em casa!'
-            self.show_message(self.font, message, position=(200, 144))
+            self.show_message(self.font, message, position=(200*2, 144*2))
             self.pause = True
 
     def is_player_coliding(self, dir, player: Player):
@@ -158,9 +158,9 @@ class Level_Controller:
     def update(self, surface, font, text):
         text_surface = font.render(text, False, (255, 255, 255))
             
-        surface.blit(text_surface, (116, 10))
+        surface.blit(text_surface, (116*2, 10*2))
 
-    def show_message(self, font, text, position=(200, 304)):
+    def show_message(self, font, text, position=(200*2, 304*2)):
         self.message_surface.fill((0,0, 0, 0))
         text_surface = font.render(text, False, (255, 255, 255))
         self.text_tick = 180

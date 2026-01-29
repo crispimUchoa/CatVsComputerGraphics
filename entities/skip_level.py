@@ -1,5 +1,5 @@
 class Skip_Level:
-    def __init__(self, pos, next_level, w=48, h=16, name=''):
+    def __init__(self, pos, next_level, w=48*2, h=32, name=''):
         self.pos = pos
         self.next_level = next_level
         self.w = w

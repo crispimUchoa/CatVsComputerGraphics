@@ -45,9 +45,9 @@ tile_code = {
 }
 
 
-level_home = Level(tile_map, tile_code, (12*16, 32), [Skip_Level((11*16, 0), 1)], name='home', 
+level_home = Level(tile_map, tile_code, (12*32, 32), [Skip_Level((11*32, 0), 1)], name='home', 
                    items= [
-                       Item((48, 15*16), 'student_card', 24, 15, CAT_CARD_1_SPRITE),
-                       Item((400-48, 15*16), 'laptop', 24, 24, LAPTOP_SPRITE)
+                       Item((3*32, 15*32), 'student_card', 48, 30, CAT_CARD_1_SPRITE),
+                       Item((25*32-3*32, 15*32), 'laptop', 48, 48, LAPTOP_SPRITE)
                    ]
                    )

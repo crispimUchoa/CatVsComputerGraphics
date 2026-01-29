@@ -20,14 +20,14 @@ key_map = {
 #
 DISPLAY_CAPTION = 'Cat Vs Computer Graphics - MENU'
 pygame.init()
-width, height = 400, 320
+width, height = 800, 640
 virtual_screen = pygame.Surface((width, height))
-screen = pygame.display.set_mode((width*2, 2*height), pygame.SRCALPHA, pygame.SCALED)
+screen = pygame.display.set_mode((width, height), pygame.SRCALPHA)
 pygame.display.set_caption(DISPLAY_CAPTION)
 clock = pygame.time.Clock()
 running = True
 
-font = pygame.font.SysFont(None, 12)
+font = pygame.font.SysFont(None, 24)
 message_font = pygame.font.SysFont(None, 24)
 
 text_surface = pygame.Surface((width, height)).convert_alpha()
@@ -132,21 +132,19 @@ while running:
     level.draw_items(virtual_screen, s_item, var_tx, player)
     player.show(virtual_screen, uvs_default)
     level.show_timer_bar()
-    scaled = pygame.transform.scale(virtual_screen, (width*2, height*2))
-    scaled_bus = pygame.transform.scale(bus_surface, (width*2, height*2))
-    screen.blit(scaled, (0, 0))
+    screen.blit(virtual_screen, (0, 0))
     
     if level.level == level_street:
-        screen.blit(scaled_bus, (0, 0))
+        screen.blit(bus_surface, (0, 0))
 
 
-    scaled_text = pygame.transform.scale(text_surface, (width*2, height*2))
-    screen.blit(scaled_text, (0, 0))
+    screen.blit(text_surface, (0, 0))
 
-    scaled_message = pygame.transform.scale(message_surface, (width*2, height*2))
 
     if level.text_tick >= 0:
-        screen.blit(scaled_message, (0, 0))
+        screen.blit(message_surface, (0, 0))
+
+    
     pygame.display.flip()
 
     if not level.pause:
