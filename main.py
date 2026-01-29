@@ -33,6 +33,13 @@ pygame.display.set_caption(DISPLAY_CAPTION)
 clock = pygame.time.Clock()
 running = True
 
+pygame.init()
+pygame.mixer.init()
+
+pygame.mixer.music.load("sounds/song.mpeg")
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.2)
+
 font = pygame.font.SysFont(None, 24)
 message_font = pygame.font.SysFont(None, 24)
 menu_font = pygame.font.SysFont(None, 48)
