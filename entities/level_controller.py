@@ -6,6 +6,7 @@ from tile import Tile
 
 class Level_Controller:
     def __init__(self, surface, static_surface, gradient_surface, bus_surface):
+        self.text_tick = -1
         self.end = False
         self.win = False
         self.pause = False
@@ -91,7 +92,18 @@ class Level_Controller:
         bar_current_x = bar_total_x * bar_percent
         scanline_fill(self.surface,  [(padding, padding), (padding, padding + bar_y), (padding + bar_current_x, padding + bar_y), (padding + bar_current_x, padding)], (0, 255, 0))
 
-    def after_tick_status(self, player):
+    def after_tick_status(self, surface, font):
+        if self.text_tick > 0:
+            self.text_tick -=1
+        elif self.text_tick == 0:
+            self.show_text = False
+            self.show_text -=1
+        else:
+            surface.fill((0, 0,0, 0))
+            
+        surface.fill((0, 0,0, 0))
+        self.update(surface, font, self.get_timer_in_hm())
+
         if self.timer >= self.total_time:
             self.end = True
 
@@ -126,3 +138,9 @@ class Level_Controller:
                     if player.items['laptop'] == 1 and player.items['student_card'] == 2:
                         self.win = True
             
+    def update(self, surface, font, text):
+        text_surface = font.render(text, False, (255, 255, 255))
+        self.text_tick = 300
+            
+        surface.blit(text_surface, (116, 10))
+

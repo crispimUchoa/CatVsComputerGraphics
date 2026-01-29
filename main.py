@@ -27,9 +27,9 @@ pygame.display.set_caption(DISPLAY_CAPTION)
 clock = pygame.time.Clock()
 running = True
 
-font = pygame.font.SysFont(None, 36)
+font = pygame.font.SysFont(None, 12)
 
-text_surface = font.render('Hello world!', False, (255, 0, 0))
+text_surface = pygame.Surface((width, height)).convert_alpha()
 
 
 
@@ -135,10 +135,13 @@ while running:
     if level.level == level_street:
         screen.blit(scaled_bus, (0, 0))
 
+
+    scaled_text = pygame.transform.scale(text_surface, (width*2, height*2))
+    screen.blit(scaled_text, (0, 0))
     pygame.display.flip()
 
     if not level.pause:
-        level.after_tick_status(player)
+        level.after_tick_status(text_surface, font)
         player.status_after_tick()
         level.increase_timer()
 

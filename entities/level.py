@@ -1,7 +1,7 @@
 from entities.item import Item
 from entities.player import Player
 from entities.skip_level import Skip_Level
-from primitives.fill_functions import scanline_texture
+from primitives.fill_functions import scanline_fill, scanline_texture
 from tile import Tile
 
 
@@ -74,6 +74,13 @@ class Level:
         if self.details:
             self.draw_details(surfaces)
 
+        scanline_fill(static_surface, [
+            (10, 10), (106, 10), (106, 18), (10, 18)
+        ], (0, 0, 0))
+
+        scanline_fill(static_surface, [
+            (112, 10), (139, 10), (139, 18), (112, 18)
+        ], (0, 0, 0))
         
 
     
