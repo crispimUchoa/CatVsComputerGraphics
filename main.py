@@ -28,8 +28,11 @@ clock = pygame.time.Clock()
 running = True
 
 font = pygame.font.SysFont(None, 12)
+message_font = pygame.font.SysFont(None, 24)
 
 text_surface = pygame.Surface((width, height)).convert_alpha()
+message_surface = pygame.Surface((width, height)).convert_alpha()
+message_surface.fill((0, 0, 0, 0))
 
 
 
@@ -58,10 +61,10 @@ gradient_surface = pygame.Surface((width, height))
 #
 #DEFINE PLAYER
 #
-static_surface = pygame.Surface((width, height))
+static_surface = pygame.Surface((width, height)).convert_alpha()
 bus_surface = pygame.Surface((width, height), pygame.SRCALPHA)
 
-level = Level_Controller(virtual_screen, static_surface, gradient_surface, bus_surface)
+level = Level_Controller(virtual_screen, static_surface, gradient_surface, bus_surface, message_surface, message_font)
 player = Player((0, 0))
 level.set_level(level_home, player)
 # scanline_texture(static_surface, [ (width - 22*16, height - 15*16),(width, height - 15*16),(width, height - 7*16),(width - 22*16, height - 7*16) ], uvs_default, BUS_SPRITE)
@@ -82,6 +85,7 @@ s = 1
 s_item = 1.1
 var_tx = -8
 offset = 0
+
 while running:
     clock.tick(60)
 
@@ -106,7 +110,7 @@ while running:
                 level.is_player_meeting_professor(player)
 
             if event.key == pygame.K_ESCAPE:
-                level.pause = not level.pause
+                level.toggle_pause()
 
     keys = pygame.key.get_pressed()
     for key, dir in key_map.items():
@@ -114,7 +118,6 @@ while running:
         if keys[key] and not level.is_player_coliding(dir, player) and not level.pause:
             player.move(dir)
 
-    virtual_screen.blit(static_surface, (0, 0))
         
     if level.level == level_classroom:
         offset = (offset - 4) % height
@@ -123,9 +126,10 @@ while running:
         level.level.draw_dynamic_details(virtual_screen, angle, s) 
     
 
+    virtual_screen.blit(static_surface, (0, 0))
 
 
-    level.draw_items(virtual_screen, s_item, var_tx)
+    level.draw_items(virtual_screen, s_item, var_tx, player)
     player.show(virtual_screen, uvs_default)
     level.show_timer_bar()
     scaled = pygame.transform.scale(virtual_screen, (width*2, height*2))
@@ -138,6 +142,11 @@ while running:
 
     scaled_text = pygame.transform.scale(text_surface, (width*2, height*2))
     screen.blit(scaled_text, (0, 0))
+
+    scaled_message = pygame.transform.scale(message_surface, (width*2, height*2))
+
+    if level.text_tick >= 0:
+        screen.blit(scaled_message, (0, 0))
     pygame.display.flip()
 
     if not level.pause:

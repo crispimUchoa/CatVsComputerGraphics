@@ -7,9 +7,32 @@ from primitives.draw_functions import draw_polygon
 from primitives.fill_functions import scanline_fill, scanline_fill_gradient
 from primitives.transform_functions import create_transform, multiply_matrix, rotation, scale, transform, translation
 
+def star_vertices(x, y):
+    return [
+        (x,     y - 8),   # topo
+        (x + 2, y - 3),
+        (x + 8, y - 3),
+        (x + 3, y + 1),
+        (x + 5, y + 8),
+        (x,     y + 4),
+        (x - 5, y + 8),
+        (x - 3, y + 1),
+        (x - 8, y - 3),
+        (x - 2, y - 3),
+    ]
 
 def draw_details(surfaces):
-    _, _, gradient_surface, _ = surfaces
+    _, static_surface, gradient_surface, _ = surfaces
+
+    static_surface.fill((0, 0, 0, 0))
+
+    scanline_fill(static_surface, [
+            (10, 10), (106, 10), (106, 18), (10, 18)
+        ], (0, 0, 0))
+
+    scanline_fill(static_surface, [
+            (112, 10), (139, 10), (139, 18), (112, 18)
+        ], (0, 0, 0))
     width = 400
     height = 320
     c1 = (127, 0, 127)
@@ -31,6 +54,12 @@ def dynamic(surface, angle, s):
     professor_head_in = [(width/2 - 30, 18), (width/2 + 30, 18), (width/2 + 30, 50), (width/2 - 30, 50) ]
     professor_body = [(width/2 - 6, 30), (width/2 + 6, 30), (width/2 + 6, 100), (width/2 + 32, 108), (width/2 - 32, 108), (width/2 - 6, 100)]
 
+    stars = [
+        ( 80,  75),   (160,  75),   (240,  75),   (320,  75),
+( 80, 225),   (160, 225),   (240, 225),   (320, 225)
+
+    ]
+
     pcx = sum(p[0] for p in professor_head_out_1) / len(professor_head_out_1)
     pcy = sum(p[1] for p in professor_head_out_1) / len(professor_head_out_1)
 
@@ -42,11 +71,26 @@ def dynamic(surface, angle, s):
     pho1 = transform(m, professor_head_out_1)
     pho2 = transform(m, professor_head_out_2)
     phin = transform(m, professor_head_in)
+    
+    for star in stars:
+        x, y = star
+        star_s = 1.20 + 0.20*math.sin(angle*2)
+        ms = create_transform()
+        ms = multiply_matrix(translation(-x, -y), ms)
+        ms = multiply_matrix(rotation(angle*2), ms)
+        ms = multiply_matrix(scale(star_s, star_s), ms)
+        ms = multiply_matrix(translation(x, y), ms)
+
+        mstar = transform(ms, star_vertices(x, y))
+
+        scanline_fill(surface, mstar, (255, 255, 0))
+
 
     scanline_fill(surface, professor_body, (32, 32, 32))
     scanline_fill(surface, pho1, (32, 32, 32))
     draw_polygon(surface, pho2, (32, 32, 32))
     scanline_fill(surface, phin, 'black')
+
 
 
 

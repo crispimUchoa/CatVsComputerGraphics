@@ -3,9 +3,12 @@ from entities.player import Player
 from entities.skip_level import Skip_Level
 from primitives.fill_functions import scanline_fill, scanline_texture
 from tile import Tile
+import asyncio
 
 class Level_Controller:
-    def __init__(self, surface, static_surface, gradient_surface, bus_surface):
+    def __init__(self, surface, static_surface, gradient_surface, bus_surface, message_surface, font):
+        self.font = font
+        self.message_surface = message_surface
         self.text_tick = -1
         self.end = False
         self.win = False
@@ -32,6 +35,12 @@ class Level_Controller:
         
 
     def set_level(self, level: Level, player):
+        if level.name == 'home':
+            self.show_message(self.font, 'Ache seus itens e vá para a aula')
+
+        if level.name == 'classroom':
+            self.show_message(self.font, 'Vá até o professor')
+
         self.level = level
         self.skip_level = level.skip
         self.player_pos = level.player_pos
@@ -66,23 +75,26 @@ class Level_Controller:
         m = timer % 60
         return f'{h:02d}:{m:02d}'
 
+
     def isskip(self, player):
         for skip in self.level.skip:
             if skip.check_player_colision(player.pos):
                 if skip.next_level.name == 'classroom':
                     if player.items['student_card'] < 2:
-
+                        self.show_message(self.font, 'Pegue sua carteirinha de estudante')
                         return
                 self.set_level(skip.next_level, player)
 
-    def draw_items(self, surface, s, var_tx):
+    def draw_items(self, surface, s, var_tx, player):
+        px, py = player.pos
         for item in self.level.items:
-            item.draw_sprite(surface, s, var_tx)
+            ix, iy = item.position
+            if px - player.vision_range <= ix <= px + player.vision_range and py - player.vision_range/2 <= iy <= py + player.vision_range/2:
+                item.draw_sprite(surface, s, var_tx)
 
-    def set_pause(self, ):
-        if self.pause:
-            ...
-        self.pause = not self.pause
+    def toggle_pause(self):
+        if not self.end:
+            self.pause = not self.pause
 
     def show_timer_bar(self):
         padding = 10
@@ -98,17 +110,22 @@ class Level_Controller:
         elif self.text_tick == 0:
             self.show_text = False
             self.show_text -=1
+            self.message_surface.fill((0, 0, 0, 0))
         else:
             surface.fill((0, 0,0, 0))
             
         surface.fill((0, 0,0, 0))
         self.update(surface, font, self.get_timer_in_hm())
 
-        if self.timer >= self.total_time:
-            self.end = True
-
+        if not self.end:
+            if self.timer >= self.total_time:
+                self.end = True
         if self.end:
-            print('Ganhou' if self.win else 'Perdeu')
+            message = 'Parabéns! Aguarde sua nota!' if self.win else 'Você perdeu!'
+            if not self.win:
+                message += ' Seu tempo acabou!' if self.timer >= self.total_time else ' Esqueceu notebook em casa!'
+            self.show_message(self.font, message, position=(200, 144))
+            self.pause = True
 
     def is_player_coliding(self, dir, player: Player):
         x, y = player.pos
@@ -140,7 +157,13 @@ class Level_Controller:
             
     def update(self, surface, font, text):
         text_surface = font.render(text, False, (255, 255, 255))
-        self.text_tick = 300
             
         surface.blit(text_surface, (116, 10))
 
+    def show_message(self, font, text, position=(200, 304)):
+        self.message_surface.fill((0,0, 0, 0))
+        text_surface = font.render(text, False, (255, 255, 255))
+        self.text_tick = 180
+        x, y = position
+        margin_x = len(text)*16/4
+        self.message_surface.blit(text_surface, (x - margin_x, y))

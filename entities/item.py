@@ -16,12 +16,8 @@ class Item:
             (1, 1),
             (0, 1)
         ]
-
-    def draw_sprite(self, surface, s, var_ty):
-        if self.is_in_inventory:
-            return
         x, y = self.position
-        vertices = [
+        self.vertices = [
             (x, y),
             (x + self.w, y),
             (x + self.w, y + self.h),
@@ -29,15 +25,20 @@ class Item:
 
         ]
 
-        cx = sum([p[0] for p in vertices ])/ len(vertices)
-        cy = sum([p[1] for p in vertices]) / len(vertices)
+
+    def draw_sprite(self, surface, s, var_ty):
+        if self.is_in_inventory:
+            return
+        
+        cx = sum([p[0] for p in self.vertices ])/ len(self.vertices)
+        cy = sum([p[1] for p in self.vertices]) / len(self.vertices)
 
         m = create_transform()
         m = multiply_matrix(translation(-cx, -cy), m)
         m = multiply_matrix(scale(s, s), m)
         m = multiply_matrix(translation(cx, cy), m)
         m = multiply_matrix(translation(0, var_ty), m)
-        item_sprite = transform(m, vertices)
+        item_sprite = transform(m, self.vertices)
 
         scanline_texture(surface, item_sprite, self.uv, self.texture)
 
