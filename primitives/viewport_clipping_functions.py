@@ -1,5 +1,6 @@
 from primitives.transform_functions import *
 
+# Cria viewport de uma janela
 def window_viewport(window, viewport):
     Wxmin, Wymin, Wxmax, Wymax = window
     Vxmin, Vymin, Vxmax, Vymax = viewport
@@ -52,6 +53,7 @@ def cohen_sutherland(x0, y0, x1, y1, xmin, ymin, xmax, ymax):
         
         c_out = c0 if c0 else c1
 
+        # Calcula intersecção com a borda
         if c_out & TOP:
             x = x0 + (x1 - x0) * (ymin - y0) / (y1 - y0)
             y = ymin

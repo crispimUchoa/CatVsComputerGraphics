@@ -3,15 +3,20 @@ from pygame.surface import Surface
 color_type = str | tuple[int, int, int]
 coord_type = tuple[int, int]
 
+# Pinta um único pixel da tela ------------------------------------------
 def set_pixel(surface: Surface, xy: coord_type, color: color_type):
     x, y = xy
     if 0 <= 0 < surface.get_width() and 0 <= y < surface.get_height():
         surface.set_at((int(x),int(y)), color)
 
+
+# Lê um único pixel da tela ------------------------------------------
+
 def read_pixel(surface: Surface, xy: coord_type):
     x, y = xy
     return surface.get_at((int(x), int(y)))
 
+# Desenha uma reta pelo algoritmo DDA ------------------------------------------
 def draw_dda_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
     x0, y0 = xy0
     x1, y1 = xy1
@@ -32,6 +37,7 @@ def draw_dda_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:colo
             x += x_inc
             y += y_inc
 
+# Desenha uma linha pelo algoritmo de Bressenham --------------------------------------------
 def draw_bressenham_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
     x0, y0 = xy0
     x1, y1 = xy1
@@ -73,6 +79,7 @@ def draw_bressenham_line(surface: Surface, xy0: coord_type, xy1: coord_type, col
 
         x += 1
 
+# Desenha uma linha com base em f(x) = mx + b --------------------------------
 def draw_naive_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:color_type):
     x0, y0 = xy0
     x1, y1 = xy1
@@ -92,6 +99,7 @@ def draw_naive_line(surface: Surface, xy0: coord_type, xy1: coord_type, color:co
         y = m*x + b
         set_pixel(surface, (x, y), color)
 
+# Desenha um poligno a partir de bressenham ----------------------------------------
 def draw_polygon(surface: Surface, vertices: list[coord_type], color: color_type):
     num_v = len(vertices)
 
@@ -104,6 +112,7 @@ def draw_polygon(surface: Surface, vertices: list[coord_type], color: color_type
 
         draw_bressenham_line(surface, (int(x0), int(y0)), (int(x1), int(y1)), color)
 
+# Desenha cada meio quadrante de uma circunferencia -----------------
 def plot8(surface: Surface, xyc: coord_type, xy: coord_type, color):
     xc, yc = xyc
     x, y = xy
@@ -117,6 +126,7 @@ def plot8(surface: Surface, xyc: coord_type, xy: coord_type, color):
     set_pixel(surface, (xc + y, yc - x), color)
     set_pixel(surface, (xc - y, yc - x), color)
 
+# Desenha cada quadrante de uma elipse --------------------------------
 def plot4(surface: Surface, xyc: coord_type, xy: coord_type, color):
     xc, yc = xyc
     x, y = xy
@@ -127,7 +137,7 @@ def plot4(surface: Surface, xyc: coord_type, xy: coord_type, color):
     set_pixel(surface, (xc - x, yc - y), color)
 
 
-
+# Desenha uma circunferencia com algortimo do ponto medio ------------------------
 def draw_circle(surface: Surface, center: coord_type, r: int, color: color_type):
     x = 0
     y = r
@@ -146,6 +156,7 @@ def draw_circle(surface: Surface, center: coord_type, r: int, color: color_type)
         x+=1
         plot8(surface, center, (x, y), color)
 
+# Desenha uma elipse com algortimo do ponto medio ------------------------
 def draw_elipse(surface: Surface, center: coord_type, a: int, b: int, color: color_type):
     a2, b2 = a*a, b*b
     x = 0

@@ -1,6 +1,7 @@
 from primitives.draw_functions import *
 import math
 
+# Pinta área com flood fill ------------------------------------------------
 def flood_fill(surface: Surface, xy: coord_type, fill_color: color_type, border_color: color_type):
     width = surface.get_width()
     height = surface.get_height()
@@ -25,6 +26,7 @@ def flood_fill(surface: Surface, xy: coord_type, fill_color: color_type, border_
         stack.append((x, y + 1))
         stack.append((x, y - 1))
 
+# Pinta área com scanline
 def scanline_fill(surface: Surface, vertices: list[coord_type], fill_color: color_type):
     # Encontra Y minimo e máximo
     ys = [p[1] for p in vertices]
@@ -68,6 +70,7 @@ def scanline_fill(surface: Surface, vertices: list[coord_type], fill_color: colo
                 for x in range(x_start, x_end + 1):
                     set_pixel(surface, (x, y), fill_color)
 
+# Pinta linha por linha de uma elipse
 def fill_elipses(surface: Surface, center: coord_type, a: int, b:int, fill_color: color_type):
     xc, yc = center
 
@@ -80,6 +83,7 @@ def fill_elipses(surface: Surface, center: coord_type, a: int, b:int, fill_color
         for xi in range(-x, x + 1):
             set_pixel(surface, (xc + xi, yc + y), fill_color)
 
+# Pinta textura com scanline
 def scanline_texture(surface: Surface, vertices, uvs, texture):
     n = len(vertices)
     tex_w, tex_h = texture.get_width(), texture.get_height()
@@ -147,7 +151,8 @@ def scanline_texture(surface: Surface, vertices, uvs, texture):
                     set_pixel(surface, (x, y), color)
 
 
-def interpola_cor(c1, c2, t):
+# Faz interpolação de cores pra fazer gradiente
+def color_interpolation(c1, c2, t):
     r = int(c1[0] + (c2[0]-c1[0])*t)
     g = int(c1[1] + (c2[1]-c1[1])*t)
     b = int(c1[2] + (c2[2]-c1[2])*t)
@@ -159,9 +164,7 @@ def interpola_cor(c1, c2, t):
     return (r, g, b)
     
 
-# =========================
-# Scanline Fill
-# =========================
+# Faz um scanline com interpolação para pintar gradientes -------------
 def scanline_fill_gradient(surface, vertices, colors):
     ys = [p[1] for p in vertices]
     y_min = int(min(ys))
@@ -191,7 +194,7 @@ def scanline_fill_gradient(surface, vertices, colors):
 
             t = (y - y0) / (y1 - y0)
             x = x0 + t * (x1 - x0)
-            cor_y = interpola_cor(c0, c1, t)
+            cor_y = color_interpolation(c0, c1, t)
 
             intersecoes.append((x, cor_y))
 
@@ -207,5 +210,5 @@ def scanline_fill_gradient(surface, vertices, colors):
 
                 for x in range(int(x_ini), int(x_fim) + 1):
                     t = (x - x_ini) / (x_fim - x_ini)
-                    cor = interpola_cor(cor_ini, cor_fim, t)
+                    cor = color_interpolation(cor_ini, cor_fim, t)
                     set_pixel(surface, (x, y), cor)
