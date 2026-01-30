@@ -8,21 +8,20 @@
 
 ## 2. Abra o terminal na pasta selecionada
 
-## 3. Execute git clone https://github.com/crispimUchoa/CatVsComputerGraphics.git
+### > git clone https://github.com/crispimUchoa/CatVsComputerGraphics.git
 
-## 4. Execute cd ./CatVsComputerGraphics
+### > cd ./CatVsComputerGraphics
 
-## 5. Execute python3 -m venv venv
+### > python3 -m venv venv
 
-## 6. Execute:
-##    No linux: source venv/bin/activate
-##    No windows: venv/Scripts/activate
+### No linux: > source venv/bin/activate
+### No windows: > venv/Scripts/activate
 
-## 7. Execute pip install -r requirements.txt
+### > pip install -r requirements.txt
 
-## 8. Exceute python main.py
+### > python main.py
 
-## 9. Divirta-se
+### 3. Divirta-se
 
 # Bem-vindo(a) ao Cat Vs Computer Graphics
 ## 1. Principais comandos
