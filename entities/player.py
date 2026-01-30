@@ -92,7 +92,6 @@ class Player:
         self.items[item.name] +=1
         print('pegou', item.name)
         print(self.items)
-        item.got = True     
         
 
     def get_texture(self):

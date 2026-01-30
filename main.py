@@ -265,7 +265,7 @@ while running:
         ]
 
         item_minimap = transform(m_vp, item_vertices)
-        if not item.got:
+        if not item.is_in_inventory:
             scanline_texture(virtual_screen, item_minimap,uvs_default, item.texture)
 
 

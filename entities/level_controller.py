@@ -102,9 +102,9 @@ class Level_Controller:
         xmax = px + vr
         ymax = py + vr
         for item in self.level.items:
-            if item.draw_sprite(surface, s, var_tx) is None:
+            if item.draw_sprite(s, var_tx) is None:
                 continue
-            item_vertices = item.draw_sprite(surface, s, var_tx)
+            item_vertices = item.draw_sprite(s, var_tx)
             x0, y0 = item_vertices[0]
             x2, y2 = item_vertices[2]
             visible, rx0, ry0, rx1, ry1 = cohen_sutherland(x0, y0, x2, y2, xmin, ymin, xmax, ymax)
