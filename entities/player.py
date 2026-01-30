@@ -90,8 +90,6 @@ class Player:
     def get_item(self, item: Item):
         item.is_in_inventory = True
         self.items[item.name] +=1
-        print('pegou', item.name)
-        print(self.items)
         
 
     # Obtem a textura atual do player, parado ou andando(0 , 1 ou 2)
