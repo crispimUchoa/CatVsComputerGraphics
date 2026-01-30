@@ -49,7 +49,7 @@ tile_code = {
     5: PAVEMENT_SPRITE
 }
 
-
+# Desenha o onibus na tela
 def street_details(surfaces):
     _, static_surface, _, bus_surface = surfaces
     w = static_surface.get_width()

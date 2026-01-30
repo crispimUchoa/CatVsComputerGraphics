@@ -1,27 +1,44 @@
 from entities.item import Item
-from entities.player import Player
 from entities.skip_level import Skip_Level
 from primitives.fill_functions import scanline_fill, scanline_texture
 from tile import Tile
 
+# Define estilo do cenário e interações do mapa
 
 class Level:
     def __init__(self, tile_map: list[Tile], tile_code: Tile, player_pos, skip: list[Skip_Level], details = None, dynamic_details= None, name='', w=32, obstacles = [], items: list[Item] = [], actions = []):
+        
+        # Matriz em que cada número representa um tile a ser pintado na tela -------
         self.tile_map = tile_map
+        # Dicionário que define sprite para cada elemento do tilemap ---
         self.tile_code = tile_code
+        # --------------------------------------------------------------------
         self.player_pos = player_pos
+
+        # Responsável pela troca de mapa pelo player -----
         self.skip = skip
+        
+        # Detalhes extras do mapa details() 
         self.details = details
+
+        # Identificador
         self.name = name
+
         self.walls: list[Tile] = []
         self.ground_details: list[Tile] = []
         self.ground = self.tile_code[0] if tile_map else None
         self.w = w
+
+        # Detalhes que são transformados
         self.dynamic_details = dynamic_details
+
         self.obstacles = obstacles
         self.items = items
+
+        # Interações extras com o mapa
         self.actions = actions
 
+        # Percorre o tile_map e armazena cada tile em sua lista especifica
         if self.tile_map:
             for i in range(20):
                 for j in range(25):

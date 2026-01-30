@@ -1,4 +1,3 @@
-import random
 from pygame.image import load
 
 from entities.item import Item
@@ -14,7 +13,7 @@ class Player:
         self.dir = dir
         self.walking = False
         self.walking_sprite = 0
-        self.tick_loading = 0
+        self.tick_loading = 0 # Responsavel por mostrar sprite certo ao andar
         self.items = {
             'student_card': 0,
             'laptop': 0
@@ -52,6 +51,7 @@ class Player:
         x, y = self.pos
         self.pos = (x, y + self.speed)
 
+    # Garante que não poderá andar na diagonal
     def set_dir(self, dir:str):
         if dir in ['LEFT', 'UP', 'DOWN', 'RIGHT'] and self.walking == False:
             self.dir = dir
@@ -75,7 +75,7 @@ class Player:
         self.set_dir(dir)
         self.walk(dir)
 
-
+    # Verifica se o player está em posição para pegar um item especifico
     def can_get_item(self, item: Item):
         x, y = self.pos
         return item.can_get(x - self.sx/2, y - self.sy/2) or \
@@ -94,6 +94,7 @@ class Player:
         print(self.items)
         
 
+    # Obtem a textura atual do player, parado ou andando(0 , 1 ou 2)
     def get_texture(self):
         if self.walking:
             if self.tick_loading % 3 == 0:
@@ -102,12 +103,14 @@ class Player:
         
         return self.sprites['STAND'][self.dir]
 
+    # Atuailza animação e para o player
     def status_after_tick(self):
         self.walking = False
         self.tick_loading +=1
         if self.tick_loading >=60:
             self.tick_loading = 0
 
+    # Carrega todos os sprites do player
     def load_convert_sprites(self):
         DIR = './sprites/player/'
         STAND_DIR = DIR + 'stand'

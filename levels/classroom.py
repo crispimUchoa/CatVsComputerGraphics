@@ -7,9 +7,9 @@ from primitives.draw_functions import draw_polygon
 from primitives.fill_functions import scanline_fill, scanline_fill_gradient
 from primitives.transform_functions import create_transform, multiply_matrix, rotation, scale, transform, translation
 
-def star_vertices(x, y):
+def star_vertices(x, y): # Posições das estrelas
     return [
-        (x,     y - 16),   # topo
+        (x,     y - 16),   
         (x + 4, y - 6),
         (x + 16, y - 6),
         (x + 6, y + 2),
@@ -21,6 +21,7 @@ def star_vertices(x, y):
         (x - 4, y - 6),
     ]
 
+# Pinta gradiente
 def draw_details(surfaces):
     _, static_surface, gradient_surface, _ = surfaces
 
@@ -47,6 +48,7 @@ def draw_details(surfaces):
 
                         )
 
+# Pinta estrelas e professor ---
 def dynamic(surface, angle, s):
     width = surface.get_width()
     professor_head_out_1 = [(width/2 - 32*2, 16*2), (width/2 + 32*2, 16*2), (width/2 + 32*2, 51*2), (width/2 - 32*2, 51*2) ]

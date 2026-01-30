@@ -1,3 +1,4 @@
+# Interagivel responsável pela troca de mapas
 class Skip_Level:
     def __init__(self, pos, next_level, w=48*2, h=32, name=''):
         self.pos = pos
