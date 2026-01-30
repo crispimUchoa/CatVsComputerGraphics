@@ -270,7 +270,7 @@ while running:
 
 
     # desenha e renderiza items no mapa ----------------------------------------------
-    level.draw_items(virtual_screen, s_item, var_tx, player, uvs_default)
+    level.draw_items(virtual_screen, s_item, var_tx, player)
     # -------------------------------------------------------------------------------
     level.show_timer_bar()
 

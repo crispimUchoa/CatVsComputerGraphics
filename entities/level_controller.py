@@ -3,8 +3,11 @@ from entities.player import Player
 from entities.skip_level import Skip_Level
 from primitives.fill_functions import scanline_fill, scanline_texture
 from primitives.viewport_clipping_functions import cohen_sutherland
-from tile import Tile
-import asyncio
+
+
+# Classe resposavel por controlar o game por completo
+# > Mudanças de mapas, controle do timer, controle da colisão do Player
+# > Renderizar detalhes
 
 class Level_Controller:
     def __init__(self, surface, static_surface, gradient_surface, bus_surface, message_surface, font):
@@ -27,6 +30,8 @@ class Level_Controller:
         self.total_time = 60*60 #1 horas do jogo -> 1 minutos da vida real
         default_repeat_x = self.sw / self.w
         default_repeat_y = self.sh / self.w
+
+        # UV que garante que os tiles se repitam -------------------------------
         self.uvs_default_tiling = [
                 (0.0, 0.0),
                 (default_repeat_x, 0.0),
@@ -35,27 +40,33 @@ class Level_Controller:
         ]
         
 
+    # Atualiza mapa
     def set_level(self, level: Level, player):
+        # Exibição de mensagens inicias ----------------------------------
         if level.name == 'home':
             self.show_message(self.font, 'Ache seus itens e vá para a aula')
 
         if level.name == 'classroom':
             self.show_message(self.font, 'Vá até o professor')
 
+        # Definição de atributos do mapa ---------------------------------
         self.level = level
-        self.skip_level = level.skip
         self.player_pos = level.player_pos
         surface = [ self.surface, self.static_surface, self.gradient_surface, self.bus_surface] 
+
+        # Desenha mapa na tela
         level.draw_level(surface, self.uvs_default_tiling)
 
         player.pos = level.player_pos
 
+    # Verifica se o player colide com paredes
     def iswall(self, x, y):
         for wall in self.level.walls:
             if wall.position[0] <= x <= wall.position[0] + wall.width and wall.position[1] <= y <= wall.position[1] + wall.height:
                 return True
         return False  
     
+    # Idem para obstaculos
     def isobstacle(self, x, y):
         for obstacle in self.level.obstacles:
             xmin, ymin, xmax, ymax = obstacle
@@ -66,17 +77,19 @@ class Level_Controller:
     def iscolisor(self, x, y):
         return self.iswall(x, y) or self.isobstacle(x, y)
 
+
     def increase_timer(self):
         if self.timer < self.total_time:
             self.timer+=1
     
+    # Retorna o valor do timer em hh:mm -> 07:30
     def get_timer_in_hm(self):
         timer = self.timer// 60
         h = (timer // 60) + 7
         m = (timer + 30) % 60
         return f'{h:02d}:{m:02d}'
 
-
+    # Verifica se o player está em posição para trocar de mapa -----------------------------
     def isskip(self, player):
         for skip in self.level.skip:
             if skip.check_player_colision(player.pos):
@@ -86,14 +99,9 @@ class Level_Controller:
                         return
                 self.set_level(skip.next_level, player)
 
-    # def draw_items(self, surface, s, var_tx, player):
-    #     px, py = player.pos
-    #     for item in self.level.items:
-    #         ix, iy = item.position
-    #         if px - player.vision_range <= ix <= px + player.vision_range and py - player.vision_range/2 <= iy <= py + player.vision_range/2:
-    #             item.draw_sprite(surface, s, var_tx)
 
-    def draw_items(self, surface,s, var_tx, player, uvs):
+    # Desenha os items se estiverem dentro do campo de visão do player -----------------------
+    def draw_items(self, surface,s, var_tx, player):
 
         px, py = player.pos
         vr = player.vision_range
@@ -107,6 +115,8 @@ class Level_Controller:
             item_vertices = item.draw_sprite(s, var_tx)
             x0, y0 = item_vertices[0]
             x2, y2 = item_vertices[2]
+
+            # Clipping da textura ---------------------------------------------------------------------
             visible, rx0, ry0, rx1, ry1 = cohen_sutherland(x0, y0, x2, y2, xmin, ymin, xmax, ymax)
             if visible:
                 u0 = (rx0 - x0) / (x2 - x0)
@@ -122,9 +132,11 @@ class Level_Controller:
 ]
                 scanline_texture(surface, [(rx0, ry0), (rx1, ry0), (rx1, ry1), (rx0, ry1), ], uvs_visible, item.texture)
 
+
     def toggle_pause(self):
         if not self.end:
             self.pause = not self.pause
+
 
     def show_timer_bar(self):
         padding = 10*2
@@ -134,6 +146,8 @@ class Level_Controller:
         bar_current_x = bar_total_x * bar_percent
         scanline_fill(self.surface,  [(padding, padding), (padding, padding + bar_y), (padding + bar_current_x, padding + bar_y), (padding + bar_current_x, padding)], (0, 255, 0))
 
+
+    # Atualização dos textos na tela a cada tick ------------------------------
     def after_tick_status(self, surface, font):
         if self.text_tick > 0:
             self.text_tick -=1
@@ -157,6 +171,8 @@ class Level_Controller:
             self.show_message(self.font, message, position=(200*2, 144*2))
             self.pause = True
 
+
+    # Checa a colisão do player
     def is_player_coliding(self, dir, player: Player):
         x, y = player.pos
         if dir == 'LEFT':
@@ -169,11 +185,13 @@ class Level_Controller:
             return ( y+player.sx/2 > self.sh) or self.iscolisor(x - player.sx/4, y + player.sy/2) or self.iscolisor(x + player.sx/4, y + player.sy/2)
         return False
     
+    # Verifica se o player está em posição que permite pegar algum item ------------
     def player_in_items_range(self, player: Player):
         for item in self.level.items:
             if player.can_get_item(item):
                 player.get_item(item)
 
+    # Verifica se o player está no alcance para interagir com o professor -------------
     def is_player_meeting_professor(self, player):
         for action in self.level.actions:
             xmin, ymin, xmax, ymax = action
@@ -185,11 +203,13 @@ class Level_Controller:
                     if player.items['laptop'] == 1 and player.items['student_card'] == 2:
                         self.win = True
             
+    # Atualiza timer na tela
     def update(self, surface, font, text):
         text_surface = font.render(text, False, (255, 255, 255))
             
         surface.blit(text_surface, (116*2, 10*2))
 
+    # Exibe mensagens na tela ------------------------
     def show_message(self, font, text, position=(200*2, 304*2)):
         self.message_surface.fill((0,0, 0, 0))
         text_surface = font.render(text, False, (255, 255, 255))
